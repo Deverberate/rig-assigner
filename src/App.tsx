@@ -1,13 +1,54 @@
-import { Cpu } from "lucide-react";
+import { useState, useCallback } from "react";
+import type { UserPreferences, BuildPreset } from "./types";
+import QuizWizard from "./components/QuizWizard";
+import AnalyzingLoader from "./components/AnalyzingLoader";
+import ResultsDashboard from "./components/ResultsDashboard";
+import { findBestPreset } from "./utils/matcher";
+import { presets } from "./data/presets";
+
+type AppPhase = "quiz" | "analyzing" | "results";
 
 export default function App() {
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
-      <div className="text-center">
-        <Cpu className="mx-auto mb-4 h-12 w-12 text-cyan-400" />
-        <h1 className="text-3xl font-bold">Hardware Matcher</h1>
-        <p className="mt-2 text-slate-400">Phase 1 — scaffold complete</p>
-      </div>
-    </div>
-  );
+  const [phase, setPhase] = useState<AppPhase>("quiz");
+  const [prefs, setPrefs] = useState<UserPreferences | null>(null);
+  const [matchedPreset, setMatchedPreset] = useState<BuildPreset | null>(null);
+
+  const handleQuizComplete = useCallback((userPrefs: UserPreferences) => {
+    setPrefs(userPrefs);
+    setPhase("analyzing");
+  }, []);
+
+  const handleAnalyzingComplete = useCallback(() => {
+    if (prefs) {
+      const result = findBestPreset(prefs, presets);
+      setMatchedPreset(result);
+      setPhase("results");
+    }
+  }, [prefs]);
+
+  const handleRestart = useCallback(() => {
+    setPhase("quiz");
+    setPrefs(null);
+    setMatchedPreset(null);
+  }, []);
+
+  if (phase === "quiz") {
+    return <QuizWizard onComplete={handleQuizComplete} />;
+  }
+
+  if (phase === "analyzing") {
+    return <AnalyzingLoader onComplete={handleAnalyzingComplete} />;
+  }
+
+  if (phase === "results" && matchedPreset && prefs) {
+    return (
+      <ResultsDashboard
+        initialPreset={matchedPreset}
+        preferences={prefs}
+        onRestart={handleRestart}
+      />
+    );
+  }
+
+  return null;
 }
