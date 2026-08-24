@@ -1,32 +1,41 @@
-# React + TypeScript + Vite
+# ⚡ RigAssigner — Intelligent Hardware Matcher
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+RigAssigner is a dynamic PC hardware recommendation engine built with **React**, **TypeScript**, and **Tailwind CSS**. It eliminates guesswork by matching users with balanced, workload-specific PC build configurations.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🎯 Key Features
 
-## React Compiler
+- **Workload-Specific Branching:** Tailored recommendations for:
+  - **College & Engineering:** CS/AI-ML (CUDA & high RAM) vs. Mechanical/Civil (CAD single-core IPC).
+  - **Content Creation:** 1080p social media timelines vs. heavy 4K/6K DaVinci Resolve & VFX.
+  - **Gaming:** 1080p high-refresh esports to 4K Ultra ray tracing.
+  - **Productivity:** Silent mini-PCs and heavy multi-monitor setups.
+- **Deterministic Preset Matching:** Zero AI hallucinations—all parts are pre-validated for socket compatibility, thermals, and power delivery.
+- **Detailed Component Specs:** Part breakdowns (CPU, GPU, RAM, Storage, PSU, Motherboard, Case, Cooler) with estimated pricing and workload justifications.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- **Framework:** React + Vite
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Icons:** Lucide React
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+---
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone [https://github.com/YOUR_USERNAME/rig-assigner.git](https://github.com/YOUR_USERNAME/rig-assigner.git)
+
+# Navigate into directory
+cd rig-assigner
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
