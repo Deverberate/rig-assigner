@@ -1,5 +1,7 @@
 # ⚡ RigAssigner — Intelligent Hardware Matcher
 
+(Vibecoded[except planning,execution and design] using Freebuff ai)
+
 RigAssigner is a dynamic PC hardware recommendation engine built with **React**, **TypeScript**, and **Tailwind CSS**. It eliminates guesswork by matching users with balanced, workload-specific PC build configurations.
 
 ---
