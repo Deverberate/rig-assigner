@@ -144,6 +144,7 @@ export default function ResultsDashboard({
   const [visible, setVisible] = useState(false);
   const [crossFade, setCrossFade] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
+  const [compareTargetId, setCompareTargetId] = useState<string | null>(null);
 
   useEffect(() => {
     requestAnimationFrame(() => setVisible(true));
@@ -242,6 +243,7 @@ export default function ResultsDashboard({
     setCopied(false);
     setPlainCopied(false);
     setShowComparison(false);
+    setCompareTargetId(null);
   }, [activePreset]);
 
   // ─── External links (PC only) ───────────────────────────────
@@ -585,6 +587,181 @@ export default function ResultsDashboard({
             </button>
           </div>
         </div>
+
+        {/* ── Compare with Alternative (Laptop / Phone) ── */}
+        {(isLaptopPreset(activePreset) || isPhonePreset(activePreset)) && (
+          <div className="mb-6">
+            <button
+              onClick={() => {
+                if (showComparison) {
+                  setShowComparison(false);
+                  setCompareTargetId(null);
+                } else {
+                  // Auto-select first non-current preset as default comparison
+                  const allPresets = isLaptopPreset(activePreset) ? laptopPresets : phonePresets;
+                  const other = allPresets.find((p) => p.id !== activePreset.id);
+                  setCompareTargetId(other?.id ?? null);
+                  setShowComparison(true);
+                }
+              }}
+              className={
+                "w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300 border " +
+                (showComparison
+                  ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-400"
+                  : "bg-slate-900/60 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-300")
+              }
+            >
+              <GitCompareArrows className="w-4 h-4" />
+              {showComparison ? "Hide Comparison" : "Compare with Alternative"}
+            </button>
+
+            {showComparison && compareTargetId && (
+              <div className="mt-3 rounded-xl border border-slate-700 bg-slate-900/60 p-5 transition-all duration-300">
+                {/* Comparison target picker */}
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
+                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Compare with:</span>
+                  {(isLaptopPreset(activePreset) ? laptopPresets : phonePresets)
+                    .filter((p) => p.id !== activePreset.id)
+                    .map((p) => (
+                      <button
+                        key={p.id}
+                        onClick={() => setCompareTargetId(p.id)}
+                        className={
+                          "px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all duration-200 border " +
+                          (compareTargetId === p.id
+                            ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-400"
+                            : "bg-slate-800/50 border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300")
+                        }
+                      >
+                        {p.brand} {p.title.split(" ").slice(-1)[0]}
+                      </button>
+                    ))}
+                </div>
+
+                {/* Comparison Matrix */}
+                {(() => {
+                  const allPresets = isLaptopPreset(activePreset) ? laptopPresets : phonePresets;
+                  const target = allPresets.find((p) => p.id === compareTargetId);
+                  if (!target) return null;
+                  const priceDelta = target.totalEstimatedPrice - activePreset.totalEstimatedPrice;
+
+                  if (isLaptopPreset(activePreset) && "laptopSpec" in target) {
+                    const currentSpec = activePreset.laptopSpec;
+                    const targetSpec = target.laptopSpec;
+                    const rows = [
+                      { label: "Display", icon: Monitor, current: currentSpec.display.spec, target: targetSpec.display.spec },
+                      { label: "SoC / Processor", icon: Cpu, current: currentSpec.soc.spec, target: targetSpec.soc.spec },
+                      { label: "Battery", icon: Battery, current: currentSpec.battery.spec, target: targetSpec.battery.spec },
+                      { label: "Cameras", icon: Camera, current: currentSpec.cameras.spec, target: targetSpec.cameras.spec },
+                      { label: "Weight", icon: Weight, current: currentSpec.weight, target: targetSpec.weight },
+                      { label: "Ports", icon: LayoutGrid, current: currentSpec.ports, target: targetSpec.ports },
+                      { label: "OS", icon: Zap, current: currentSpec.os, target: targetSpec.os },
+                    ];
+                    return (
+                      <>
+                        {/* Price delta */}
+                        <div className="flex items-center justify-center gap-2 mb-4 py-2 rounded-lg bg-slate-800/50">
+                          <span className="text-xs text-slate-500">Price difference:</span>
+                          <span className={`text-sm font-bold ${priceDelta < 0 ? "text-emerald-400" : priceDelta > 0 ? "text-red-400" : "text-slate-400"}`}>
+                            {priceDelta < 0 ? "\u2212" : priceDelta > 0 ? "+" : ""}${Math.abs(priceDelta).toLocaleString()}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            ({priceDelta < 0 ? "cheaper" : priceDelta > 0 ? "more" : "same price"})
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          {rows.map((row, i) => {
+                            const Icon = row.icon;
+                            const isDifferent = row.current !== row.target;
+                            return (
+                              <div key={i} className="rounded-lg border border-slate-700/50 bg-slate-800/30 p-3">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Icon className="w-3.5 h-3.5 text-slate-500" />
+                                  <span className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{row.label}</span>
+                                  {isDifferent && (
+                                    <span className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20">DIFF</span>
+                                  )}
+                                </div>
+                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                                  <div className="flex-1 min-w-0 rounded-md bg-slate-800/50 border border-slate-700/30 px-2.5 py-1.5">
+                                    <p className="text-[10px] text-cyan-400/60 uppercase font-medium mb-0.5">{activePreset.title.split(" ").slice(-1)[0]}</p>
+                                    <p className="text-xs text-slate-200 font-medium leading-snug">{row.current}</p>
+                                  </div>
+                                  <ArrowRight className="w-3 h-3 text-slate-600 flex-shrink-0 hidden sm:block" />
+                                  <div className="flex-1 min-w-0 rounded-md bg-slate-800/50 border border-slate-700/30 px-2.5 py-1.5">
+                                    <p className="text-[10px] text-violet-400/60 uppercase font-medium mb-0.5">{target.title.split(" ").slice(-1)[0]}</p>
+                                    <p className="text-xs text-slate-200 font-medium leading-snug">{row.target}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    );
+                  }
+
+                  if (isPhonePreset(activePreset) && "phoneSpec" in target) {
+                    const currentSpec = activePreset.phoneSpec;
+                    const targetSpec = target.phoneSpec;
+                    const rows = [
+                      { label: "Display", icon: Monitor, current: currentSpec.display.spec, target: targetSpec.display.spec },
+                      { label: "Chipset", icon: Cpu, current: currentSpec.chipset.spec, target: targetSpec.chipset.spec },
+                      { label: "Battery", icon: Battery, current: currentSpec.battery.spec, target: targetSpec.battery.spec },
+                      { label: "Cameras", icon: Camera, current: currentSpec.cameras.spec, target: targetSpec.cameras.spec },
+                      { label: "Weight", icon: Weight, current: currentSpec.weight, target: targetSpec.weight },
+                      { label: "Connectivity", icon: Wifi, current: currentSpec.connectivity, target: targetSpec.connectivity },
+                      { label: "OS", icon: Zap, current: currentSpec.os, target: targetSpec.os },
+                    ];
+                    return (
+                      <>
+                        <div className="flex items-center justify-center gap-2 mb-4 py-2 rounded-lg bg-slate-800/50">
+                          <span className="text-xs text-slate-500">Price difference:</span>
+                          <span className={`text-sm font-bold ${priceDelta < 0 ? "text-emerald-400" : priceDelta > 0 ? "text-red-400" : "text-slate-400"}`}>
+                            {priceDelta < 0 ? "\u2212" : priceDelta > 0 ? "+" : ""}${Math.abs(priceDelta).toLocaleString()}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            ({priceDelta < 0 ? "cheaper" : priceDelta > 0 ? "more" : "same price"})
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          {rows.map((row, i) => {
+                            const Icon = row.icon;
+                            const isDifferent = row.current !== row.target;
+                            return (
+                              <div key={i} className="rounded-lg border border-slate-700/50 bg-slate-800/30 p-3">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Icon className="w-3.5 h-3.5 text-slate-500" />
+                                  <span className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{row.label}</span>
+                                  {isDifferent && (
+                                    <span className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20">DIFF</span>
+                                  )}
+                                </div>
+                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                                  <div className="flex-1 min-w-0 rounded-md bg-slate-800/50 border border-slate-700/30 px-2.5 py-1.5">
+                                    <p className="text-[10px] text-cyan-400/60 uppercase font-medium mb-0.5">{activePreset.title.split(" ").slice(-1)[0]}</p>
+                                    <p className="text-xs text-slate-200 font-medium leading-snug">{row.current}</p>
+                                  </div>
+                                  <ArrowRight className="w-3 h-3 text-slate-600 flex-shrink-0 hidden sm:block" />
+                                  <div className="flex-1 min-w-0 rounded-md bg-slate-800/50 border border-slate-700/30 px-2.5 py-1.5">
+                                    <p className="text-[10px] text-violet-400/60 uppercase font-medium mb-0.5">{target.title.split(" ").slice(-1)[0]}</p>
+                                    <p className="text-xs text-slate-200 font-medium leading-snug">{row.target}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    );
+                  }
+
+                  return null;
+                })()}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* ── Compare with Previous Meta (PC only) ── */}
         {hasPrevious && (

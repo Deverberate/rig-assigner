@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Gamepad2,
   Film,
@@ -62,7 +63,7 @@ const DEVICE_OPTIONS: OptionCard[] = [
   },
 ];
 
-// ─── PC Options (existing) ─────────────────────────────────────
+// ─── PC Options ────────────────────────────────────────────────
 const PC_PRIMARY_USE: OptionCard[] = [
   {
     value: "gaming",
@@ -270,13 +271,13 @@ const LAPTOP_FORM_FACTOR: OptionCard[] = [
   {
     value: "sff-mini",
     label: "Performance Laptop",
-    description: "15-16\" — powerful with decent portability",
+    description: '15-16" — powerful with decent portability',
     icon: Box,
   },
   {
     value: "rgb-showcase",
     label: "Desktop Replacement",
-    description: "17\"+ — maximum screen and cooling, less portable",
+    description: '17"+ — maximum screen and cooling, less portable',
     icon: Sparkles,
   },
 ];
@@ -284,19 +285,19 @@ const LAPTOP_FORM_FACTOR: OptionCard[] = [
 const PHONE_FORM_FACTOR: OptionCard[] = [
   {
     value: "standard-tower",
-    label: "Compact (6.1\"–6.3\")",
+    label: 'Compact (6.1"–6.3")',
     description: "One-hand friendly, pocketable, lighter",
     icon: Minus,
   },
   {
     value: "sff-mini",
-    label: "Standard (6.5\"–6.7\")",
+    label: 'Standard (6.5"–6.7")',
     description: "The sweet spot — big enough for media, small enough for pockets",
     icon: Box,
   },
   {
     value: "rgb-showcase",
-    label: "Max / Ultra (6.8\"+)",
+    label: 'Max / Ultra (6.8"+)',
     description: "Largest display — best for media, gaming, and productivity",
     icon: Sparkles,
   },
@@ -314,17 +315,35 @@ function getStepLabels(device: DeviceCategory): string[] {
   }
 }
 
+// ─── Framer Motion Variants ────────────────────────────────────
+const stepVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 80 : -80,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -80 : 80,
+    opacity: 0,
+  }),
+};
+
 interface QuizWizardProps {
   onComplete: (prefs: UserPreferences) => void;
 }
 
 export default function QuizWizard({ onComplete }: QuizWizardProps) {
   const [deviceCategory, setDeviceCategory] = useState<DeviceCategory | null>(null);
-  const [step, setStep] = useState(0); // 0 = device selector
+  const [step, setStep] = useState(0);
   const [primaryUse, setPrimaryUse] = useState<PrimaryUse | null>(null);
   const [branch, setBranch] = useState<BranchOrSubtype | null>(null);
   const [budget, setBudget] = useState<BudgetTier | null>(null);
   const [formFactor, setFormFactor] = useState<FormFactor | null>(null);
+  const [direction, setDirection] = useState(1);
+  const prevStepRef = useRef(0);
 
   const isPC = deviceCategory === "pc";
   const totalSteps = isPC ? 4 : 3;
@@ -351,19 +370,27 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
     }
   })();
 
+  const goToStep = (newStep: number) => {
+    setDirection(newStep > prevStepRef.current ? 1 : -1);
+    prevStepRef.current = newStep;
+    setStep(newStep);
+  };
+
   const handleNext = () => {
     if (step === 0) {
+      setDirection(1);
+      prevStepRef.current = 0;
       setStep(1);
       return;
     }
     const maxStep = isPC ? 4 : 3;
     if (step < maxStep) {
-      setStep(step + 1);
+      goToStep(step + 1);
     } else if (primaryUse && budget && formFactor) {
       onComplete({
         deviceCategory: deviceCategory!,
         primaryUse,
-        branchOrSubtype: branch || primaryUse as BranchOrSubtype,
+        branchOrSubtype: branch || (primaryUse as BranchOrSubtype),
         budgetTier: budget,
         formFactor,
       });
@@ -376,7 +403,7 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
       setPrimaryUse(null);
       setBranch(null);
       setDeviceCategory(null);
-      setStep(0);
+      goToStep(0);
       return;
     }
     if (step === 2) {
@@ -388,7 +415,7 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
       else setFormFactor(null);
     }
     if (step === 4) setFormFactor(null);
-    setStep(step - 1);
+    goToStep(step - 1);
   };
 
   const handleCardSelect = (value: string) => {
@@ -450,7 +477,6 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
         default: return [];
       }
     } else {
-      // phone
       switch (step) {
         case 1: return PHONE_USE_OPTIONS;
         case 2: return BUDGET_OPTIONS;
@@ -509,9 +535,11 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
               <span className="font-medium text-slate-300">{stepLabel}</span>
             </div>
             <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500 ease-out"
-                style={{ width: `${progress}%` }}
+              <motion.div
+                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                initial={false}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
               />
             </div>
             <div className="flex justify-between mt-3">
@@ -519,7 +547,7 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
                 <button
                   key={s}
                   onClick={() => {
-                    if (s < step) setStep(s);
+                    if (s < step) goToStep(s);
                   }}
                   className={
                     "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 " +
@@ -537,54 +565,67 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
           </div>
         )}
 
-        {/* Option Cards */}
-        <div className={`grid gap-4 ${step === 0 ? "sm:grid-cols-3" : "sm:grid-cols-2"} mb-8`}>
-          {getOptions().map((opt) => {
-            const Icon = opt.icon;
-            const isSelected = getSelectedValue() === opt.value;
-            return (
-              <button
-                key={opt.value}
-                onClick={() => handleCardSelect(opt.value)}
-                className={
-                  "group relative text-left rounded-xl p-5 border-2 transition-all duration-300 " +
-                  (isSelected
-                    ? "border-cyan-400 bg-cyan-500/10 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
-                    : "border-slate-700 bg-slate-900/50 hover:border-slate-500 hover:bg-slate-800/50")
-                }
-              >
-                <div className="flex items-start gap-4">
-                  <div
-                    className={
-                      "flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-300 " +
-                      (isSelected
-                        ? "bg-cyan-500/20 text-cyan-400"
-                        : "bg-slate-800 text-slate-400 group-hover:text-slate-300")
-                    }
-                  >
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <div className="min-w-0">
-                    <h3
+        {/* Animated Option Cards */}
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={`step-${step}-${deviceCategory}`}
+            custom={direction}
+            variants={stepVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className={`grid gap-4 ${step === 0 ? "sm:grid-cols-3" : "sm:grid-cols-2"} mb-8`}
+          >
+            {getOptions().map((opt) => {
+              const Icon = opt.icon;
+              const isSelected = getSelectedValue() === opt.value;
+              return (
+                <motion.button
+                  key={opt.value}
+                  onClick={() => handleCardSelect(opt.value)}
+                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.01 }}
+                  className={
+                    "group relative text-left rounded-xl p-5 border-2 transition-colors duration-300 " +
+                    (isSelected
+                      ? "border-cyan-400 bg-cyan-500/10 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
+                      : "border-slate-700 bg-slate-900/50 hover:border-slate-500 hover:bg-slate-800/50")
+                  }
+                >
+                  <div className="flex items-start gap-4">
+                    <div
                       className={
-                        "font-semibold text-base transition-colors duration-300 " +
-                        (isSelected ? "text-cyan-300" : "text-slate-200")
+                        "flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-300 " +
+                        (isSelected
+                          ? "bg-cyan-500/20 text-cyan-400"
+                          : "bg-slate-800 text-slate-400 group-hover:text-slate-300")
                       }
                     >
-                      {opt.label}
-                    </h3>
-                    <p className="text-sm text-slate-400 mt-1 leading-relaxed">
-                      {opt.description}
-                    </p>
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3
+                        className={
+                          "font-semibold text-base transition-colors duration-300 " +
+                          (isSelected ? "text-cyan-300" : "text-slate-200")
+                        }
+                      >
+                        {opt.label}
+                      </h3>
+                      <p className="text-sm text-slate-400 mt-1 leading-relaxed">
+                        {opt.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                {isSelected && (
-                  <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
-                )}
-              </button>
-            );
-          })}
-        </div>
+                  {isSelected && (
+                    <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
+                  )}
+                </motion.button>
+              );
+            })}
+          </motion.div>
+        </AnimatePresence>
 
         {/* Navigation */}
         <div className="flex items-center justify-between">
