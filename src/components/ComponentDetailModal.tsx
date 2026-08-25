@@ -8,6 +8,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import type { ComponentPart, PrimaryUse, DeviceCategory } from "../types";
+import ProductImage from "./ProductImage";
 
 // ─── Mock data per part name for community verdict & specs ──────
 interface PartDetailData {
@@ -550,9 +551,15 @@ export default function ComponentDetailModal({
             onClick={(e) => e.stopPropagation()}
           >
             {/* ── Header ── */}
-            <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 bg-slate-900 border-b border-slate-700/50 rounded-t-2xl">
-              <div>
-                <h3 className="text-lg font-bold text-slate-100 leading-tight">{lookupKey}</h3>
+            <div className="sticky top-0 z-10 flex items-center gap-3 px-5 py-4 bg-slate-900 border-b border-slate-700/50 rounded-t-2xl">
+              <ProductImage
+                src={part.imageUrl}
+                alt={lookupKey}
+                category="cpu"
+                className="flex-shrink-0 w-14 h-14 rounded-xl border border-slate-700/50"
+              />
+              <div className="min-w-0 flex-1">
+                <h3 className="text-lg font-bold text-slate-100 leading-tight truncate">{lookupKey}</h3>
                 <span className="inline-block mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20 uppercase tracking-wider">
                   {detail.categoryBadge}
                 </span>

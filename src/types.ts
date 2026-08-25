@@ -99,6 +99,7 @@ export interface ComponentPart {
   name: string;
   spec: string;
   estimatedPrice: number;
+  imageUrl?: string;
 }
 
 /** A complete hardware build preset */
@@ -125,6 +126,41 @@ export interface PeripheralItem {
   iconName: string;
   buyLinks: { store: string; url: string; price: number }[];
 }
+
+/** Parts catalog item for the Custom PC Builder */
+export type PartCategory =
+  | "cpu"
+  | "gpu"
+  | "ram"
+  | "storage"
+  | "motherboard"
+  | "psu"
+  | "cooler"
+  | "case";
+
+export interface StoreLink {
+  store: "Amazon" | "Flipkart" | "Newegg" | "MicroCenter";
+  url: string;
+  livePrice: number;
+}
+
+export interface PartCatalogItem {
+  id: string;
+  category: PartCategory;
+  name: string;
+  brand: string;
+  priceUSD: number;
+  priceINR: number;
+  specs: string[];
+  tdpWatts: number;
+  socket?: string;
+  formFactor?: string;
+  imageUrl?: string;
+  storeLinks?: StoreLink[];
+}
+
+/** App view modes */
+export type AppViewMode = "quiz" | "builder";
 
 export interface BuildPreset {
   id: string;

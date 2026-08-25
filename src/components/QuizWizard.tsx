@@ -25,6 +25,10 @@ import {
   User,
   type LucideIcon,
 } from "lucide-react";
+import {
+  Settings,
+  Wrench,
+} from "lucide-react";
 import type {
   DeviceCategory,
   PrimaryUse,
@@ -45,7 +49,7 @@ interface OptionCard {
 const DEVICE_OPTIONS: OptionCard[] = [
   {
     value: "pc",
-    label: "Custom PC",
+    label: "Desktop PC",
     description: "Build your own desktop — maximum power and upgradeability",
     icon: Cpu,
   },
@@ -333,10 +337,12 @@ const stepVariants = {
 
 interface QuizWizardProps {
   onComplete: (prefs: UserPreferences) => void;
+  onStartBuilder?: () => void;
 }
 
-export default function QuizWizard({ onComplete }: QuizWizardProps) {
+export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardProps) {
   const [deviceCategory, setDeviceCategory] = useState<DeviceCategory | null>(null);
+  const [pcMode, setPcMode] = useState<"guided" | "builder" | null>(null);
   const [step, setStep] = useState(0);
   const [primaryUse, setPrimaryUse] = useState<PrimaryUse | null>(null);
   const [branch, setBranch] = useState<BranchOrSubtype | null>(null);
@@ -348,8 +354,10 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
   const isPC = deviceCategory === "pc";
   const totalSteps = isPC ? 4 : 3;
   const stepLabels = deviceCategory ? getStepLabels(deviceCategory) : [];
+  const showModeSelect = step === 0 && deviceCategory === "pc" && pcMode === null;
 
   const canNext = (() => {
+    if (showModeSelect) return false;
     if (step === 0) return deviceCategory !== null;
     if (!deviceCategory) return false;
     if (isPC) {
@@ -377,6 +385,7 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
   };
 
   const handleNext = () => {
+    if (showModeSelect) return;
     if (step === 0) {
       setDirection(1);
       prevStepRef.current = 0;
@@ -398,11 +407,16 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
   };
 
   const handleBack = () => {
+    if (showModeSelect) {
+      setDeviceCategory(null);
+      return;
+    }
     if (step === 0) return;
     if (step === 1) {
       setPrimaryUse(null);
       setBranch(null);
       setDeviceCategory(null);
+      setPcMode(null);
       goToStep(0);
       return;
     }
@@ -561,6 +575,66 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
                   {s < step ? "\u2713" : s}
                 </button>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Mode Selection for Desktop PC */}
+        {showModeSelect && (
+          <div className="mb-8">
+            <p className="text-center text-sm text-slate-400 mb-4">
+              How would you like to build your desktop PC?
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <motion.button
+                onClick={() => {
+                  setPcMode("guided");
+                  setDirection(1);
+                  prevStepRef.current = 0;
+                  setStep(1);
+                }}
+                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.01 }}
+                className="group text-left rounded-xl p-6 border-2 border-slate-700 bg-slate-900/50 hover:border-cyan-500/50 hover:bg-slate-800/50 transition-colors duration-300"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-800 text-slate-400 group-hover:text-cyan-400 group-hover:bg-cyan-500/10 flex items-center justify-center transition-colors duration-300">
+                    <Settings className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-base text-slate-200 group-hover:text-cyan-300 transition-colors duration-300">
+                      Guided Rig Assigner
+                    </h3>
+                    <p className="text-sm text-slate-400 mt-1 leading-relaxed">
+                      Answer 4 quick questions about your workload, budget, and aesthetic — we recommend the perfect build.
+                    </p>
+                  </div>
+                </div>
+              </motion.button>
+
+              <motion.button
+                onClick={() => {
+                  setPcMode("builder");
+                  onStartBuilder?.();
+                }}
+                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.01 }}
+                className="group text-left rounded-xl p-6 border-2 border-slate-700 bg-slate-900/50 hover:border-emerald-500/50 hover:bg-slate-800/50 transition-colors duration-300"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-800 text-slate-400 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 flex items-center justify-center transition-colors duration-300">
+                    <Wrench className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-base text-slate-200 group-hover:text-emerald-300 transition-colors duration-300">
+                      Custom Part Picker Workbench
+                    </h3>
+                    <p className="text-sm text-slate-400 mt-1 leading-relaxed">
+                      Hand-pick every component from our curated catalog — full control like PCPartPicker.
+                    </p>
+                  </div>
+                </div>
+              </motion.button>
             </div>
           </div>
         )}

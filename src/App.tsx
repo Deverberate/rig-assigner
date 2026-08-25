@@ -5,31 +5,62 @@ import type {
   LaptopPreset,
   PhonePreset,
   DeviceCategory,
+  PartCategory,
 } from "./types";
 import QuizWizard from "./components/QuizWizard";
 import AnalyzingLoader from "./components/AnalyzingLoader";
 import ResultsDashboard from "./components/ResultsDashboard";
+import CustomPCBuilder from "./components/CustomPCBuilder";
 import { findBestMatch } from "./utils/matcher";
 import { presets } from "./data/presets";
 import { laptopPresets } from "./data/laptopPresets";
 import { phonePresets } from "./data/phonePresets";
+import { partsCatalog } from "./data/partsCatalog";
 
-type AppPhase = "quiz" | "analyzing" | "results";
+type AppPhase = "quiz" | "analyzing" | "results" | "builder";
+
+const PART_CATEGORY_ORDER: PartCategory[] = [
+  "cpu", "gpu", "ram", "storage", "motherboard", "psu", "cooler", "case",
+];
 
 /**
  * Parse URL query params for direct linking:
  *   ?type=laptop&id=zephyrus-g14
- *   ?type=phone&id=iphone-16-pro
- *   ?type=pc&id=gaming-1440p-mid
+ *   ?mode=builder&parts=cpu_7800x3d,gpu_4070s,...
  */
-function parseUrlParams(): { type: DeviceCategory; id: string } | null {
+function parseUrlParams(): {
+  type: DeviceCategory | null;
+  id: string | null;
+  mode: string | null;
+  builderParts: Record<PartCategory, string | null>;
+} {
   const params = new URLSearchParams(window.location.search);
   const type = params.get("type") as DeviceCategory | null;
   const id = params.get("id");
-  if (type && id && ["pc", "laptop", "phone"].includes(type)) {
-    return { type, id };
+  const mode = params.get("mode");
+  const partsParam = params.get("parts");
+
+  const builderParts: Record<PartCategory, string | null> = {
+    cpu: null, gpu: null, ram: null, storage: null,
+    motherboard: null, psu: null, cooler: null, case: null,
+  };
+
+  if (partsParam) {
+    for (const entry of partsParam.split(",")) {
+      const sep = entry.indexOf("_");
+      if (sep > 0) {
+        const cat = entry.substring(0, sep) as PartCategory;
+        const partId = entry.substring(sep + 1);
+        if (PART_CATEGORY_ORDER.includes(cat)) {
+          // Find the full part ID in the catalog
+          const match = partsCatalog.find((p) => p.id.endsWith(partId));
+          if (match) builderParts[cat] = match.id;
+        }
+      }
+    }
   }
-  return null;
+
+  return { type, id, mode, builderParts };
 }
 
 /**
@@ -55,16 +86,27 @@ export default function App() {
   const [phase, setPhase] = useState<AppPhase>("quiz");
   const [prefs, setPrefs] = useState<UserPreferences | null>(null);
   const [matchedPreset, setMatchedPreset] = useState<BuildPreset | LaptopPreset | PhonePreset | null>(null);
+  const [initialBuilderParts, setInitialBuilderParts] = useState<Record<PartCategory, string | null> | null>(null);
 
   // Check for URL deep link on mount
   useEffect(() => {
-    const urlMatch = parseUrlParams();
-    if (urlMatch) {
-      const preset = findPresetById(urlMatch.type, urlMatch.id);
+    const urlParams = parseUrlParams();
+
+    // Builder mode deep link
+    if (urlParams.mode === "builder") {
+      setPhase("builder");
+      if (Object.values(urlParams.builderParts).some(Boolean)) {
+        setInitialBuilderParts(urlParams.builderParts);
+      }
+      return;
+    }
+
+    // Preset deep link
+    if (urlParams.type && urlParams.id) {
+      const preset = findPresetById(urlParams.type, urlParams.id);
       if (preset) {
-        // Reconstruct minimal preferences from URL
         const dummyPrefs: UserPreferences = {
-          deviceCategory: urlMatch.type,
+          deviceCategory: urlParams.type,
           primaryUse: "gaming",
           branchOrSubtype: "1080p-esports",
           budgetTier: "mid-tier",
@@ -92,7 +134,6 @@ export default function App() {
       setMatchedPreset(result);
       setPhase("results");
 
-      // Update URL for sharing
       const url = new URL(window.location.href);
       url.searchParams.set("type", prefs.deviceCategory);
       url.searchParams.set("id", result.id);
@@ -100,19 +141,39 @@ export default function App() {
     }
   }, [prefs]);
 
+  const handleStartBuilder = useCallback(() => {
+    setPhase("builder");
+    const url = new URL(window.location.href);
+    url.searchParams.set("mode", "builder");
+    url.searchParams.delete("type");
+    url.searchParams.delete("id");
+    window.history.replaceState({}, "", url.toString());
+  }, []);
+
   const handleRestart = useCallback(() => {
     setPhase("quiz");
     setPrefs(null);
     setMatchedPreset(null);
-    // Clear URL params
+    setInitialBuilderParts(null);
     const url = new URL(window.location.href);
     url.searchParams.delete("type");
     url.searchParams.delete("id");
+    url.searchParams.delete("mode");
+    url.searchParams.delete("parts");
     window.history.replaceState({}, "", url.pathname);
   }, []);
 
   if (phase === "quiz") {
-    return <QuizWizard onComplete={handleQuizComplete} />;
+    return <QuizWizard onComplete={handleQuizComplete} onStartBuilder={handleStartBuilder} />;
+  }
+
+  if (phase === "builder") {
+    return (
+      <CustomPCBuilder
+        onBack={handleRestart}
+        initialParts={initialBuilderParts ?? undefined}
+      />
+    );
   }
 
   if (phase === "analyzing") {
@@ -130,15 +191,4 @@ export default function App() {
   }
 
   return null;
-}
-
-import { Analytics } from '@vercel/analytics/react';
-
-export default function App() {
-  return (
-    <>
-      {/* your existing app code */}
-      <Analytics />
-    </>
-  );
 }
