@@ -115,6 +115,17 @@ export interface PreviousBuild {
   retiredDate: string;
 }
 
+/** Peripheral / accessory item */
+export interface PeripheralItem {
+  id: string;
+  category: "keyboard" | "mouse" | "monitor" | "audio" | "controller";
+  name: string;
+  price: number;
+  brand: string;
+  iconName: string;
+  buyLinks: { store: string; url: string; price: number }[];
+}
+
 export interface BuildPreset {
   id: string;
   title: string;

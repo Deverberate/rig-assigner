@@ -28,6 +28,13 @@ import {
   Camera,
   Wifi,
   Laptop,
+  ChevronDown,
+  Keyboard,
+  Mouse,
+  Headphones,
+  Gamepad2,
+  CheckSquare,
+  Square,
   type LucideIcon,
 } from "lucide-react";
 import type {
@@ -37,6 +44,7 @@ import type {
   PhonePreset,
   PrimaryUse,
   ComponentPart,
+  PeripheralItem,
 } from "../types";
 import { laptopPresets } from "../data/laptopPresets";
 import { phonePresets } from "../data/phonePresets";
@@ -45,6 +53,8 @@ import {
   findAdjacentLaptops,
   findAdjacentPhones,
 } from "../utils/matcher";
+import { peripherals } from "../data/peripherals";
+import ComponentDetailModal from "./ComponentDetailModal";
 
 // ─── Type guards ───────────────────────────────────────────────
 function isBuildPreset(p: BuildPreset | LaptopPreset | PhonePreset): p is BuildPreset {
@@ -106,6 +116,23 @@ const COMPONENT_META: Record<string, { icon: LucideIcon; label: string }> = {
 
 const COMPONENT_KEYS = ["cpu", "gpu", "ram", "storage", "motherboard", "psu", "cooler", "case"] as const;
 
+// ─── Peripheral icon map ──────────────────────────────────────
+const PERIPHERAL_ICONS: Record<string, LucideIcon> = {
+  Keyboard,
+  Mouse,
+  Monitor,
+  Headphones,
+  Gamepad2,
+};
+
+const PERIPHERAL_CATEGORY_LABELS: Record<string, string> = {
+  keyboard: "Keyboard",
+  mouse: "Mouse",
+  monitor: "Monitor",
+  audio: "Audio",
+  controller: "Controller",
+};
+
 // ─── PC Preset adjacency (delegated to matcher) ──────────────
 
 // ─── Changed parts helper ──────────────────────────────────────
@@ -145,6 +172,9 @@ export default function ResultsDashboard({
   const [crossFade, setCrossFade] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
   const [compareTargetId, setCompareTargetId] = useState<string | null>(null);
+  const [modalPart, setModalPart] = useState<{ part: ComponentPart; key: string } | null>(null);
+  const [selectedPeripherals, setSelectedPeripherals] = useState<Set<string>>(new Set());
+  const [showPeripherals, setShowPeripherals] = useState(false);
 
   useEffect(() => {
     requestAnimationFrame(() => setVisible(true));
@@ -178,6 +208,27 @@ export default function ResultsDashboard({
     },
     []
   );
+
+  // ─── Peripherals ────────────────────────────────────────────
+  const peripheralTotal = peripherals
+    .filter((p) => selectedPeripherals.has(p.id))
+    .reduce((sum, p) => sum + p.price, 0);
+
+  const togglePeripheral = useCallback((id: string) => {
+    setSelectedPeripherals((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  // Group peripherals by category
+  const peripheralGroups = peripherals.reduce<Record<string, PeripheralItem[]>>((acc, p) => {
+    if (!acc[p.category]) acc[p.category] = [];
+    acc[p.category].push(p);
+    return acc;
+  }, {});
 
   // ─── Copy functions ──────────────────────────────────────────
   const buildCopyText = useCallback(
@@ -220,11 +271,21 @@ export default function ResultsDashboard({
         lines.push(`${bullet}Connectivity: ${s.connectivity}`);
       }
 
+      // Peripherals
+      const selected = peripherals.filter((p) => selectedPeripherals.has(p.id));
+      if (selected.length > 0) {
+        lines.push("");
+        lines.push("--- Peripherals ---");
+        selected.forEach((p) => lines.push(`${bullet}${PERIPHERAL_CATEGORY_LABELS[p.category] || p.category}: ${p.name} ($${p.price})`));
+        lines.push("");
+        lines.push(`Total Setup: $${(activePreset.totalEstimatedPrice + peripheralTotal).toLocaleString()}`);
+      }
+
       lines.push("");
       lines.push("Generated via RigAssigner");
       return lines.join("\n");
     },
-    [activePreset, deviceCategory]
+    [activePreset, deviceCategory, selectedPeripherals, peripheralTotal]
   );
 
   const handleCopy = useCallback(async () => {
@@ -359,8 +420,12 @@ export default function ResultsDashboard({
           return (
             <div
               key={key}
+              role="button"
+              tabIndex={0}
+              onClick={() => setModalPart({ part, key })}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setModalPart({ part, key }); }}
               className={
-                "rounded-xl border bg-slate-900/60 p-4 transition-all duration-150 group " +
+                "rounded-xl border bg-slate-900/60 p-4 transition-all duration-150 group cursor-pointer hover:border-cyan-400 active:scale-[0.99] " +
                 (isChanged
                   ? "border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.1)]"
                   : "border-slate-700 hover:border-cyan-500/50")
@@ -929,7 +994,97 @@ export default function ResultsDashboard({
             Search on Amazon
           </a>
         </div>
+
+        {/* ── Total Setup Cost (if peripherals selected) ── */}
+        {selectedPeripherals.size > 0 && (
+          <div className="mt-6 rounded-xl border border-cyan-500/30 bg-slate-900/60 p-5 shadow-[0_0_20px_rgba(34,211,238,0.05)]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Total Setup Cost</p>
+                <p className="text-[11px] text-slate-500 mt-0.5">Build + {selectedPeripherals.size} selected peripheral{selectedPeripherals.size > 1 ? "s" : ""}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-cyan-400">
+                  ${(activePreset.totalEstimatedPrice + peripheralTotal).toLocaleString()}
+                </p>
+                <p className="text-[10px] text-slate-500">
+                  +${peripheralTotal.toLocaleString()} peripherals
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Recommended Peripherals & Gear ── */}
+        <div className="mt-6 rounded-xl border border-slate-700 bg-slate-900/60 overflow-hidden">
+          <button
+            onClick={() => setShowPeripherals(!showPeripherals)}
+            className="w-full flex items-center justify-between px-5 py-4 text-left transition-all hover:bg-slate-800/50"
+          >
+            <div className="flex items-center gap-2">
+              <Gamepad2 className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm font-semibold text-slate-200">Recommended Peripherals & Gear</span>
+              {selectedPeripherals.size > 0 && (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20">
+                  {selectedPeripherals.size} selected
+                </span>
+              )}
+            </div>
+            <ChevronDown
+              className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${showPeripherals ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {showPeripherals && (
+            <div className="px-5 pb-5 space-y-4 border-t border-slate-700/50">
+              {Object.entries(peripheralGroups).map(([category, items]) => (
+                <div key={category} className="pt-3">
+                  <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold mb-2">
+                    {PERIPHERAL_CATEGORY_LABELS[category] || category}
+                  </p>
+                  <div className="space-y-1.5">
+                    {items.map((p) => {
+                      const Icon = PERIPHERAL_ICONS[p.iconName] || Gamepad2;
+                      const isSelected = selectedPeripherals.has(p.id);
+                      return (
+                        <button
+                          key={p.id}
+                          onClick={() => togglePeripheral(p.id)}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all duration-200 text-left ${isSelected ? "border-cyan-500/40 bg-cyan-500/5" : "border-slate-700/50 bg-slate-800/20 hover:border-slate-600 hover:bg-slate-800/40"}`} >
+                          <div className="w-6 h-6 flex items-center justify-center">
+                            {isSelected ? (
+                              <CheckSquare className="w-5 h-5 text-cyan-400" />
+                            ) : (
+                              <Square className="w-5 h-5 text-slate-600" />
+                            )}
+                          </div>
+                          <Icon className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm font-medium truncate ${isSelected ? "text-cyan-300" : "text-slate-300"}`}>{p.name}</p>
+                          </div>
+                          <span className="text-sm font-bold text-cyan-400 ml-2">${p.price}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* ── Component Detail Modal ── */}
+      {modalPart && (
+        <ComponentDetailModal
+          isOpen={!!modalPart}
+          onClose={() => setModalPart(null)}
+          part={modalPart.part}
+          partKey={modalPart.key}
+          primaryUse={preferences.primaryUse}
+          deviceCategory={preferences.deviceCategory}
+        />
+      )}
     </div>
   );
 }
