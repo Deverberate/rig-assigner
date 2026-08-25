@@ -70,6 +70,40 @@ export const presets: BuildPreset[] = [
       "32 GB system RAM handles large datasets in-memory",
       "AM5 platform leaves headroom for future Ryzen upgrades",
     ],
+  performanceMetrics: [
+    {
+        "label": "LLM Inference",
+        "value": "Llama-3 8B: ~25 tok/s",
+        "iconName": "Brain"
+    },
+    {
+        "label": "PyTorch Training",
+        "value": "ResNet-50: ~420 img/s",
+        "iconName": "Zap"
+    },
+    {
+        "label": "CUDA Cores",
+        "value": "4,352 CUDA + 136 Tensor",
+        "iconName": "Cpu"
+    }
+],
+  lastUpdated: "July 2026",
+  changeSummary: "Upgraded from RTX 4060 Ti to 16 GB variant — critical for running Llama-3 8B and larger local models without quantization.",
+  previousBuild: {
+    title: "AI/ML Workstation – Student (v1)",
+    totalPrice: 1215,
+    retiredDate: "April 2026",
+    parts: [
+      { name: "CPU", spec: "AMD Ryzen 7 7700X (8C / 16T, 5.4 GHz boost)", estimatedPrice: 299 },
+      { name: "GPU", spec: "NVIDIA GeForce RTX 4060 Ti 8 GB GDDR6", estimatedPrice: 389 },
+      { name: "RAM", spec: "32 GB (2x16) DDR5-5600 CL36", estimatedPrice: 85 },
+      { name: "Storage", spec: "1 TB WD Black SN770 NVMe PCIe 4.0", estimatedPrice: 65 },
+      { name: "Motherboard", spec: "MSI B650 Gaming Plus WiFi (ATX, AM5)", estimatedPrice: 179 },
+      { name: "PSU", spec: "Corsair RM750e 750W 80+ Gold (Fully Modular)", estimatedPrice: 89 },
+      { name: "Cooler", spec: "Thermalright Peerless Assassin 120 SE (Dual Tower)", estimatedPrice: 35 },
+      { name: "Case", spec: "Fractal Design Pop Air (ATX Mid Tower)", estimatedPrice: 79 },
+    ]
+  },
   },
 
   // ─── 2. Mechanical / Civil CAD ────────────────────────────────────────
@@ -125,6 +159,23 @@ export const presets: BuildPreset[] = [
       "NVIDIA ISV-certified drivers for certified SOLIDWORKS / CATIA stability",
       "Noctua cooler keeps thermals whisper-quiet during long renders",
     ],
+  performanceMetrics: [
+    {
+        "label": "SolidWorks Rebuild",
+        "value": "~2.8s complex assembly",
+        "iconName": "Wrench"
+    },
+    {
+        "label": "AutoCAD 2D Drafting",
+        "value": "60 FPS smooth pan/zoom",
+        "iconName": "Ruler"
+    },
+    {
+        "label": "Single-Core Turbo",
+        "value": "5.6 GHz boost clock",
+        "iconName": "Zap"
+    }
+],
   },
 
   // ─── 3. Video Editing – 1080p Social Media ───────────────────────────
@@ -180,6 +231,23 @@ export const presets: BuildPreset[] = [
       "NVMe SSD gives fast media import and proxy generation",
       "Budget-friendly without sacrificing editing responsiveness",
     ],
+  performanceMetrics: [
+    {
+        "label": "DaVinci 1080p",
+        "value": "Smooth real-time playback",
+        "iconName": "Film"
+    },
+    {
+        "label": "Export Speed",
+        "value": "5-min 1080p: ~90s H.264",
+        "iconName": "Clock"
+    },
+    {
+        "label": "RAM Headroom",
+        "value": "32 GB: multi-track + FX",
+        "iconName": "MemoryStick"
+    }
+],
   },
 
   // ─── 4. Video Editing – 4K / Heavy VFX ───────────────────────────────
@@ -235,6 +303,40 @@ export const presets: BuildPreset[] = [
       "64 GB RAM allows After Effects RAM previews of complex compositions",
       "2 TB NVMe keeps raw 4K footage accessible without external drives",
     ],
+  performanceMetrics: [
+    {
+        "label": "DaVinci 4K Resolve",
+        "value": "Smooth 60fps scrubbing",
+        "iconName": "Film"
+    },
+    {
+        "label": "After Effects RAM",
+        "value": "64 GB: complex comps",
+        "iconName": "Layers"
+    },
+    {
+        "label": "Batch Export",
+        "value": "16-core: 3x faster encode",
+        "iconName": "Zap"
+    }
+],
+  lastUpdated: "August 2026",
+  changeSummary: "Upgraded to Ryzen 9 7950X from 7900X — 16 cores now standard for VFX rendering. Price dropped $50 post-launch.",
+  previousBuild: {
+    title: "4K / VFX Professional Build (v1)",
+    totalPrice: 2510,
+    retiredDate: "May 2026",
+    parts: [
+      { name: "CPU", spec: "AMD Ryzen 9 7900X (12C / 24T, 5.6 GHz boost)", estimatedPrice: 429 },
+      { name: "GPU", spec: "NVIDIA RTX 4070 Ti Super 16 GB GDDR6X", estimatedPrice: 799 },
+      { name: "RAM", spec: "64 GB (2x32) DDR5-6000 CL30", estimatedPrice: 179 },
+      { name: "Storage", spec: "2 TB Samsung 990 Pro NVMe PCIe 4.0", estimatedPrice: 159 },
+      { name: "Motherboard", spec: "ASUS ROG Strix X670E-F Gaming WiFi (ATX, AM5)", estimatedPrice: 329 },
+      { name: "PSU", spec: "Corsair RM1000e 1000W 80+ Gold (Fully Modular)", estimatedPrice: 149 },
+      { name: "Cooler", spec: "Arctic Liquid Freezer III 360 (AIO 360mm)", estimatedPrice: 89 },
+      { name: "Case", spec: "Fractal Design North (ATX Mid Tower)", estimatedPrice: 139 },
+    ]
+  },
   },
 
   // ─── 5. 1080p Competitive Gaming ──────────────────────────────────────
@@ -290,6 +392,23 @@ export const presets: BuildPreset[] = [
       "DDR5-6000 tuned for AMD Infinity Fabric 1:1 ratio",
       "Mesh front panel keeps GPU cool during marathon sessions",
     ],
+  performanceMetrics: [
+    {
+        "label": "Valorant 1080p",
+        "value": "400+ FPS",
+        "iconName": "Target"
+    },
+    {
+        "label": "CS2 1080p",
+        "value": "300+ FPS",
+        "iconName": "Crosshair"
+    },
+    {
+        "label": "Fortnite 1080p",
+        "value": "240+ FPS",
+        "iconName": "Zap"
+    }
+],
   },
 
   // ─── 6. 1440p Sweet-Spot Gaming ───────────────────────────────────────
@@ -345,6 +464,40 @@ export const presets: BuildPreset[] = [
       "Hogwarts Legacy 1440p Ultra: ~100 FPS",
       "Starfield 1440p High: ~90 FPS",
     ],
+  performanceMetrics: [
+    {
+        "label": "Cyberpunk 2077",
+        "value": "~80 FPS RT Ultra + DLSS",
+        "iconName": "Gamepad2"
+    },
+    {
+        "label": "Hogwarts Legacy",
+        "value": "~100 FPS Ultra",
+        "iconName": "Wand"
+    },
+    {
+        "label": "Starfield",
+        "value": "~90 FPS High",
+        "iconName": "Rocket"
+    }
+],
+  lastUpdated: "August 2026",
+  changeSummary: "Swapped to Ryzen 7 7800X3D + RTX 4070 Super due to recent price correction — ~12% better perf/$ vs previous i5-14600KF + RTX 4070 combo.",
+  previousBuild: {
+    title: "1440p Sweet-Spot Build (v1)",
+    totalPrice: 1699,
+    retiredDate: "June 2026",
+    parts: [
+      { name: "CPU", spec: "Intel Core i5-14600KF (14C / 20T, 5.3 GHz)", estimatedPrice: 279 },
+      { name: "GPU", spec: "NVIDIA RTX 4070 12 GB GDDR6X", estimatedPrice: 549 },
+      { name: "RAM", spec: "32 GB (2x16) DDR5-5600 CL36", estimatedPrice: 89 },
+      { name: "Storage", spec: "1 TB WD Black SN770 NVMe", estimatedPrice: 65 },
+      { name: "Motherboard", spec: "MSI B760 Tomahawk WiFi (ATX, LGA1700)", estimatedPrice: 189 },
+      { name: "PSU", spec: "Corsair RM750e 750W 80+ Gold", estimatedPrice: 89 },
+      { name: "Cooler", spec: "DeepCool AK620 (Dual Tower)", estimatedPrice: 55 },
+      { name: "Case", spec: "NZXT H7 Flow (ATX Mid Tower)", estimatedPrice: 129 },
+    ]
+  },
   },
 
   // ─── 7. 4K Enthusiast Gaming ──────────────────────────────────────────
@@ -400,6 +553,23 @@ export const presets: BuildPreset[] = [
       "2 TB NVMe keeps massive game library fast-loading",
       "Top-tier build for years of 4K gaming ahead",
     ],
+  performanceMetrics: [
+    {
+        "label": "Cyberpunk 2077",
+        "value": "~60 FPS 4K RT Overdrive",
+        "iconName": "Gamepad2"
+    },
+    {
+        "label": "Alan Wake 2",
+        "value": "~70 FPS 4K RT Max",
+        "iconName": "Flashlight"
+    },
+    {
+        "label": "DLSS 3 Frame Gen",
+        "value": "4K 120Hz capable",
+        "iconName": "Zap"
+    }
+],
   },
 
   // ─── 8. Office / Basic Productivity ───────────────────────────────────
@@ -455,6 +625,23 @@ export const presets: BuildPreset[] = [
       "AM5 socket allows future CPU upgrades",
       "Perfect for Google Workspace, Excel, Slack, and video calls",
     ],
+  performanceMetrics: [
+    {
+        "label": "Boot Time",
+        "value": "~12s to desktop",
+        "iconName": "Power"
+    },
+    {
+        "label": "Multi-Tab Browsing",
+        "value": "30+ Chrome tabs smooth",
+        "iconName": "Globe"
+    },
+    {
+        "label": "Noise Level",
+        "value": "Near-silent at idle",
+        "iconName": "VolumeX"
+    }
+],
   },
 
   // ─── 9. Office / Heavy Multi-Screen Financial ────────────────────────
@@ -510,6 +697,23 @@ export const presets: BuildPreset[] = [
       "Workstation GPU avoids driver crashes in financial apps",
       "Professional, quiet aesthetic for client-facing environments",
     ],
+  performanceMetrics: [
+    {
+        "label": "Multi-Monitor",
+        "value": "4x 4K @ 60Hz native",
+        "iconName": "Monitor"
+    },
+    {
+        "label": "Excel Modeling",
+        "value": "64 GB: massive datasets",
+        "iconName": "Table"
+    },
+    {
+        "label": "Workstation GPU",
+        "value": "ISV-certified, no crashes",
+        "iconName": "ShieldCheck"
+    }
+],
   },
 
   // ─── 10. General College Student ──────────────────────────────────────
@@ -565,5 +769,22 @@ export const presets: BuildPreset[] = [
       "Compact mATX build fits in dorm rooms",
       "AM5 upgrade path extends the system's useful life",
     ],
+  performanceMetrics: [
+    {
+        "label": "Everyday Performance",
+        "value": "Boot & apps in seconds",
+        "iconName": "Rocket"
+    },
+    {
+        "label": "Blender Learning",
+        "value": "RTX 4060 viewport smooth",
+        "iconName": "Box"
+    },
+    {
+        "label": "Dorm-Friendly",
+        "value": "Compact mATX form factor",
+        "iconName": "Home"
+    }
+],
   },
 ];

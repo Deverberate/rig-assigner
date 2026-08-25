@@ -44,6 +44,19 @@ export interface ComponentPart {
 }
 
 /** A complete hardware build preset */
+export interface PerformanceMetric {
+  label: string;
+  value: string;
+  iconName: string;
+}
+
+export interface PreviousBuild {
+  title: string;
+  totalPrice: number;
+  parts: ComponentPart[];
+  retiredDate: string;
+}
+
 export interface BuildPreset {
   id: string;
   title: string;
@@ -59,4 +72,8 @@ export interface BuildPreset {
   case: ComponentPart;
   totalEstimatedPrice: number;
   highlights: string[];
+  performanceMetrics: PerformanceMetric[];
+  lastUpdated?: string;
+  changeSummary?: string;
+  previousBuild?: PreviousBuild;
 }
