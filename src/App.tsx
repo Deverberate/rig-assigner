@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import type {
   UserPreferences,
   BuildPreset,
@@ -112,33 +113,35 @@ export default function App() {
   }, []);
 
   if (phase === "quiz") {
-    return <QuizWizard onComplete={handleQuizComplete} />;
+    return (
+      <>
+        <QuizWizard onComplete={handleQuizComplete} />
+        <Analytics />
+      </>
+    );
   }
 
   if (phase === "analyzing") {
-    return <AnalyzingLoader onComplete={handleAnalyzingComplete} />;
+    return (
+      <>
+        <AnalyzingLoader onComplete={handleAnalyzingComplete} />
+        <Analytics />
+      </>
+    );
   }
 
   if (phase === "results" && matchedPreset && prefs) {
     return (
-      <ResultsDashboard
-        initialPreset={matchedPreset}
-        preferences={prefs}
-        onRestart={handleRestart}
-      />
+      <>
+        <ResultsDashboard
+          initialPreset={matchedPreset}
+          preferences={prefs}
+          onRestart={handleRestart}
+        />
+        <Analytics />
+      </>
     );
   }
 
   return null;
-}
-
-import { Analytics } from '@vercel/analytics/react';
-
-export default function App() {
-  return (
-    <>
-      {/* your existing app code */}
-      <Analytics />
-    </>
-  );
 }
