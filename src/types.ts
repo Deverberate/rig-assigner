@@ -1,3 +1,6 @@
+/** Device categories */
+export type DeviceCategory = "pc" | "laptop" | "phone";
+
 /** Primary use-case categories */
 export type PrimaryUse =
   | "gaming"
@@ -28,8 +31,63 @@ export type BudgetTier = "budget" | "mid-tier" | "flagship";
 
 export type FormFactor = "standard-tower" | "sff-mini" | "rgb-showcase";
 
+/** Laptop-specific spec */
+export interface LaptopSpec {
+  display: ComponentPart;
+  soc: ComponentPart;
+  battery: ComponentPart;
+  cameras: ComponentPart;
+  weight: string;
+  ports: string;
+  os: string;
+}
+
+/** Phone-specific spec */
+export interface PhoneSpec {
+  display: ComponentPart;
+  chipset: ComponentPart;
+  battery: ComponentPart;
+  cameras: ComponentPart;
+  weight: string;
+  os: string;
+  connectivity: string;
+}
+
+/** A complete laptop preset */
+export interface LaptopPreset {
+  id: string;
+  title: string;
+  targetAudience: string;
+  budgetCategory: BudgetTier;
+  brand: string;
+  laptopSpec: LaptopSpec;
+  totalEstimatedPrice: number;
+  highlights: string[];
+  performanceMetrics: PerformanceMetric[];
+  lastUpdated?: string;
+  changeSummary?: string;
+  previousBuild?: PreviousBuild;
+}
+
+/** A complete phone preset */
+export interface PhonePreset {
+  id: string;
+  title: string;
+  targetAudience: string;
+  budgetCategory: BudgetTier;
+  brand: string;
+  phoneSpec: PhoneSpec;
+  totalEstimatedPrice: number;
+  highlights: string[];
+  performanceMetrics: PerformanceMetric[];
+  lastUpdated?: string;
+  changeSummary?: string;
+  previousBuild?: PreviousBuild;
+}
+
 /** User's selections collected from the multi-step form */
 export interface UserPreferences {
+  deviceCategory: DeviceCategory;
   primaryUse: PrimaryUse;
   branchOrSubtype: BranchOrSubtype;
   budgetTier: BudgetTier;

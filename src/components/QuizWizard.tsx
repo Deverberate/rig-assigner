@@ -17,9 +17,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Trophy,
+  Smartphone,
+  Laptop,
+  Camera,
+  Rocket,
+  User,
   type LucideIcon,
 } from "lucide-react";
 import type {
+  DeviceCategory,
   PrimaryUse,
   BranchOrSubtype,
   BudgetTier,
@@ -34,9 +40,30 @@ interface OptionCard {
   icon: LucideIcon;
 }
 
-const STEP_LABELS = ["Primary Goal", "Workload Focus", "Budget", "Form Factor"];
+// ─── Device Category Options ───────────────────────────────────
+const DEVICE_OPTIONS: OptionCard[] = [
+  {
+    value: "pc",
+    label: "Custom PC",
+    description: "Build your own desktop — maximum power and upgradeability",
+    icon: Cpu,
+  },
+  {
+    value: "laptop",
+    label: "Laptop",
+    description: "Portable performance — work and play from anywhere",
+    icon: Laptop,
+  },
+  {
+    value: "phone",
+    label: "Smartphone",
+    description: "The device in your pocket — camera, gaming, productivity",
+    icon: Smartphone,
+  },
+];
 
-const PRIMARY_USE_OPTIONS: OptionCard[] = [
+// ─── PC Options (existing) ─────────────────────────────────────
+const PC_PRIMARY_USE: OptionCard[] = [
   {
     value: "gaming",
     label: "Gaming",
@@ -63,7 +90,7 @@ const PRIMARY_USE_OPTIONS: OptionCard[] = [
   },
 ];
 
-const BRANCH_OPTIONS: Record<PrimaryUse, OptionCard[]> = {
+const PC_BRANCH_OPTIONS: Record<PrimaryUse, OptionCard[]> = {
   gaming: [
     {
       value: "1080p-esports",
@@ -88,7 +115,7 @@ const BRANCH_OPTIONS: Record<PrimaryUse, OptionCard[]> = {
     {
       value: "1080p-social-media",
       label: "1080p Social / YouTube",
-      description: "Fast edits, shorts, reels \u2014 quick turnaround",
+      description: "Fast edits, shorts, reels — quick turnaround",
       icon: Film,
     },
     {
@@ -134,38 +161,95 @@ const BRANCH_OPTIONS: Record<PrimaryUse, OptionCard[]> = {
   ],
 };
 
+// ─── Laptop Options ────────────────────────────────────────────
+const LAPTOP_USE_OPTIONS: OptionCard[] = [
+  {
+    value: "college-student",
+    label: "Student / General",
+    description: "Notes, research, light media, and everyday productivity",
+    icon: GraduationCap,
+  },
+  {
+    value: "gaming",
+    label: "Gaming",
+    description: "AAA titles, esports, and portable gaming sessions",
+    icon: Gamepad2,
+  },
+  {
+    value: "video-editing",
+    label: "Creative / Video Editing",
+    description: "Premiere, DaVinci Resolve, Blender on the go",
+    icon: Film,
+  },
+  {
+    value: "office",
+    label: "Business / Office",
+    description: "Presentations, video calls, corporate workflows",
+    icon: Briefcase,
+  },
+];
+
+// ─── Phone Options ─────────────────────────────────────────────
+const PHONE_USE_OPTIONS: OptionCard[] = [
+  {
+    value: "video-editing",
+    label: "Photography / Content Creation",
+    description: "Pro cameras, 4K video, and editing on-device",
+    icon: Camera,
+  },
+  {
+    value: "gaming",
+    label: "Gaming / Performance",
+    description: "Top benchmarks, high-refresh displays, fast chips",
+    icon: Gamepad2,
+  },
+  {
+    value: "office",
+    label: "General / Everyday",
+    description: "Social media, messaging, browsing, productivity",
+    icon: User,
+  },
+  {
+    value: "college-student",
+    label: "Student / Value",
+    description: "Best bang for buck — flagship features at a lower price",
+    icon: Rocket,
+  },
+];
+
+// ─── Shared Options ────────────────────────────────────────────
 const BUDGET_OPTIONS: OptionCard[] = [
   {
     value: "budget",
     label: "Budget / Value",
-    description: "Maximum performance per dollar \u2014 no frills",
+    description: "Maximum performance per dollar — no frills",
     icon: DollarSign,
   },
   {
     value: "mid-tier",
-    label: "Mid-Tier Workhorse",
-    description: "Sweet spot of performance and reliability",
+    label: "Mid-Tier Sweet Spot",
+    description: "Best balance of features and price",
     icon: TrendingUp,
   },
   {
     value: "flagship",
-    label: "Flagship / Enthusiast",
-    description: "No compromises \u2014 the best of the best",
+    label: "Flagship / No Compromises",
+    description: "The best of the best — price is no object",
     icon: Crown,
   },
 ];
 
-const FORM_FACTOR_OPTIONS: OptionCard[] = [
+const PC_FORM_FACTOR: OptionCard[] = [
   {
     value: "standard-tower",
     label: "Standard Tower",
-    description: "Classic ATX mid-tower \u2014 room to grow",
+    description: "Classic ATX mid-tower — room to grow",
     icon: Box,
   },
   {
     value: "sff-mini",
     label: "Stealth Minimalist",
-    description: "Compact SFF or mini-PC \u2014 desk-friendly",
+    description: "Compact SFF or mini-PC — desk-friendly",
     icon: Minus,
   },
   {
@@ -176,34 +260,110 @@ const FORM_FACTOR_OPTIONS: OptionCard[] = [
   },
 ];
 
+const LAPTOP_FORM_FACTOR: OptionCard[] = [
+  {
+    value: "standard-tower",
+    label: "Ultrabook / Thin & Light",
+    description: "Under 1.5 kg — portable and stylish",
+    icon: Minus,
+  },
+  {
+    value: "sff-mini",
+    label: "Performance Laptop",
+    description: "15-16\" — powerful with decent portability",
+    icon: Box,
+  },
+  {
+    value: "rgb-showcase",
+    label: "Desktop Replacement",
+    description: "17\"+ — maximum screen and cooling, less portable",
+    icon: Sparkles,
+  },
+];
+
+const PHONE_FORM_FACTOR: OptionCard[] = [
+  {
+    value: "standard-tower",
+    label: "Compact (6.1\"–6.3\")",
+    description: "One-hand friendly, pocketable, lighter",
+    icon: Minus,
+  },
+  {
+    value: "sff-mini",
+    label: "Standard (6.5\"–6.7\")",
+    description: "The sweet spot — big enough for media, small enough for pockets",
+    icon: Box,
+  },
+  {
+    value: "rgb-showcase",
+    label: "Max / Ultra (6.8\"+)",
+    description: "Largest display — best for media, gaming, and productivity",
+    icon: Sparkles,
+  },
+];
+
+// ─── Step Labels by Device ─────────────────────────────────────
+function getStepLabels(device: DeviceCategory): string[] {
+  switch (device) {
+    case "pc":
+      return ["Primary Goal", "Workload Focus", "Budget", "Form Factor"];
+    case "laptop":
+      return ["Use Case", "Budget", "Size Preference"];
+    case "phone":
+      return ["Use Case", "Budget", "Size Preference"];
+  }
+}
+
 interface QuizWizardProps {
   onComplete: (prefs: UserPreferences) => void;
 }
 
 export default function QuizWizard({ onComplete }: QuizWizardProps) {
-  const [step, setStep] = useState(1);
+  const [deviceCategory, setDeviceCategory] = useState<DeviceCategory | null>(null);
+  const [step, setStep] = useState(0); // 0 = device selector
   const [primaryUse, setPrimaryUse] = useState<PrimaryUse | null>(null);
   const [branch, setBranch] = useState<BranchOrSubtype | null>(null);
   const [budget, setBudget] = useState<BudgetTier | null>(null);
   const [formFactor, setFormFactor] = useState<FormFactor | null>(null);
 
+  const isPC = deviceCategory === "pc";
+  const totalSteps = isPC ? 4 : 3;
+  const stepLabels = deviceCategory ? getStepLabels(deviceCategory) : [];
+
   const canNext = (() => {
-    switch (step) {
-      case 1: return primaryUse !== null;
-      case 2: return branch !== null;
-      case 3: return budget !== null;
-      case 4: return formFactor !== null;
-      default: return false;
+    if (step === 0) return deviceCategory !== null;
+    if (!deviceCategory) return false;
+    if (isPC) {
+      switch (step) {
+        case 1: return primaryUse !== null;
+        case 2: return branch !== null;
+        case 3: return budget !== null;
+        case 4: return formFactor !== null;
+        default: return false;
+      }
+    } else {
+      switch (step) {
+        case 1: return primaryUse !== null;
+        case 2: return budget !== null;
+        case 3: return formFactor !== null;
+        default: return false;
+      }
     }
   })();
 
   const handleNext = () => {
-    if (step < 4) {
+    if (step === 0) {
+      setStep(1);
+      return;
+    }
+    const maxStep = isPC ? 4 : 3;
+    if (step < maxStep) {
       setStep(step + 1);
-    } else if (primaryUse && branch && budget && formFactor) {
+    } else if (primaryUse && budget && formFactor) {
       onComplete({
+        deviceCategory: deviceCategory!,
         primaryUse,
-        branchOrSubtype: branch,
+        branchOrSubtype: branch || primaryUse as BranchOrSubtype,
         budgetTier: budget,
         formFactor,
       });
@@ -211,102 +371,174 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
   };
 
   const handleBack = () => {
-    if (step > 1) {
-      if (step === 2) setBranch(null);
-      if (step === 3) setBudget(null);
-      if (step === 4) setFormFactor(null);
-      setStep(step - 1);
+    if (step === 0) return;
+    if (step === 1) {
+      setPrimaryUse(null);
+      setBranch(null);
+      setDeviceCategory(null);
+      setStep(0);
+      return;
     }
+    if (step === 2) {
+      if (isPC) setBranch(null);
+      else setBudget(null);
+    }
+    if (step === 3) {
+      if (isPC) setBudget(null);
+      else setFormFactor(null);
+    }
+    if (step === 4) setFormFactor(null);
+    setStep(step - 1);
   };
 
   const handleCardSelect = (value: string) => {
-    switch (step) {
-      case 1:
-        setPrimaryUse(value as PrimaryUse);
-        setBranch(null);
-        break;
-      case 2:
-        setBranch(value as BranchOrSubtype);
-        break;
-      case 3:
-        setBudget(value as BudgetTier);
-        break;
-      case 4:
-        setFormFactor(value as FormFactor);
-        break;
+    if (step === 0) {
+      setDeviceCategory(value as DeviceCategory);
+      setPrimaryUse(null);
+      setBranch(null);
+      setBudget(null);
+      setFormFactor(null);
+      return;
+    }
+    if (isPC) {
+      switch (step) {
+        case 1:
+          setPrimaryUse(value as PrimaryUse);
+          setBranch(null);
+          break;
+        case 2:
+          setBranch(value as BranchOrSubtype);
+          break;
+        case 3:
+          setBudget(value as BudgetTier);
+          break;
+        case 4:
+          setFormFactor(value as FormFactor);
+          break;
+      }
+    } else {
+      switch (step) {
+        case 1:
+          setPrimaryUse(value as PrimaryUse);
+          setBranch(null);
+          break;
+        case 2:
+          setBudget(value as BudgetTier);
+          break;
+        case 3:
+          setFormFactor(value as FormFactor);
+          break;
+      }
     }
   };
 
   const getOptions = (): OptionCard[] => {
-    switch (step) {
-      case 1: return PRIMARY_USE_OPTIONS;
-      case 2: return primaryUse ? BRANCH_OPTIONS[primaryUse] : [];
-      case 3: return BUDGET_OPTIONS;
-      case 4: return FORM_FACTOR_OPTIONS;
-      default: return [];
+    if (step === 0) return DEVICE_OPTIONS;
+    if (isPC) {
+      switch (step) {
+        case 1: return PC_PRIMARY_USE;
+        case 2: return primaryUse ? PC_BRANCH_OPTIONS[primaryUse] : [];
+        case 3: return BUDGET_OPTIONS;
+        case 4: return PC_FORM_FACTOR;
+        default: return [];
+      }
+    } else if (deviceCategory === "laptop") {
+      switch (step) {
+        case 1: return LAPTOP_USE_OPTIONS;
+        case 2: return BUDGET_OPTIONS;
+        case 3: return LAPTOP_FORM_FACTOR;
+        default: return [];
+      }
+    } else {
+      // phone
+      switch (step) {
+        case 1: return PHONE_USE_OPTIONS;
+        case 2: return BUDGET_OPTIONS;
+        case 3: return PHONE_FORM_FACTOR;
+        default: return [];
+      }
     }
   };
 
   const getSelectedValue = (): string | null => {
-    switch (step) {
-      case 1: return primaryUse;
-      case 2: return branch;
-      case 3: return budget;
-      case 4: return formFactor;
-      default: return null;
+    if (step === 0) return deviceCategory;
+    if (isPC) {
+      switch (step) {
+        case 1: return primaryUse;
+        case 2: return branch;
+        case 3: return budget;
+        case 4: return formFactor;
+        default: return null;
+      }
+    } else {
+      switch (step) {
+        case 1: return primaryUse;
+        case 2: return budget;
+        case 3: return formFactor;
+        default: return null;
+      }
     }
   };
 
-  const progress = (step / 4) * 100;
+  const progress = step === 0 ? 0 : (step / totalSteps) * 100;
+  const stepDisplay = step === 0 ? "Choose Device" : `Step ${step} of ${totalSteps}`;
+  const stepLabel = step === 0 ? "Device Category" : stepLabels[step - 1];
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
+        {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
             <span className="text-cyan-400">Rig</span> Assigner
           </h1>
           <p className="text-slate-400 mt-2">
-            Answer 4 quick questions {"\u2014"} we{"'"}ll match your perfect build.
+            {step === 0
+              ? "Pick your device type — we'll find the perfect match."
+              : `Answer ${totalSteps} quick questions — we'll match your perfect ${deviceCategory === "pc" ? "build" : deviceCategory}.`}
           </p>
         </div>
 
-        <div className="mb-8">
-          <div className="flex items-center justify-between text-sm text-slate-400 mb-2">
-            <span>
-              Step <span className="text-cyan-400 font-semibold">{step}</span> of 4
-            </span>
-            <span className="font-medium text-slate-300">
-              {STEP_LABELS[step - 1]}
-            </span>
+        {/* Progress Bar */}
+        {step > 0 && deviceCategory && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between text-sm text-slate-400 mb-2">
+              <span>
+                <span className="text-cyan-400 font-semibold">{stepDisplay}</span>
+              </span>
+              <span className="font-medium text-slate-300">{stepLabel}</span>
+            </div>
+            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <div className="flex justify-between mt-3">
+              {Array.from({ length: totalSteps }, (_, i) => i + 1).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => {
+                    if (s < step) setStep(s);
+                  }}
+                  className={
+                    "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 " +
+                    (s < step
+                      ? "bg-cyan-500 text-white cursor-pointer hover:bg-cyan-400"
+                      : s === step
+                        ? "bg-cyan-500/20 border-2 border-cyan-400 text-cyan-400"
+                        : "bg-slate-800 text-slate-500 border border-slate-700")
+                  }
+                >
+                  {s < step ? "\u2713" : s}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="flex justify-between mt-3">
-            {[1, 2, 3, 4].map((s) => (
-              <button
-                key={s}
-                onClick={() => { if (s < step) setStep(s); }}
-                className={
-                  "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 " +
-                  (s < step
-                    ? "bg-cyan-500 text-white cursor-pointer hover:bg-cyan-400"
-                    : s === step
-                      ? "bg-cyan-500/20 border-2 border-cyan-400 text-cyan-400"
-                      : "bg-slate-800 text-slate-500 border border-slate-700")
-                }
-              >
-                {s < step ? "\u2713" : s}
-              </button>
-            ))}
-          </div>
-        </div>
+        )}
 
-        <div className="grid gap-4 sm:grid-cols-2 mb-8">
+        {/* Option Cards */}
+        <div className={`grid gap-4 ${step === 0 ? "sm:grid-cols-3" : "sm:grid-cols-2"} mb-8`}>
           {getOptions().map((opt) => {
             const Icon = opt.icon;
             const isSelected = getSelectedValue() === opt.value;
@@ -354,12 +586,13 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
           })}
         </div>
 
+        {/* Navigation */}
         <div className="flex items-center justify-between">
           <button
             onClick={handleBack}
             className={
               "flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 " +
-              (step === 1
+              (step === 0
                 ? "invisible"
                 : "text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-500")
             }
@@ -378,7 +611,12 @@ export default function QuizWizard({ onComplete }: QuizWizardProps) {
                 : "bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700")
             }
           >
-            {step === 4 ? (
+            {step === 0 ? (
+              <>
+                Start Quiz
+                <ChevronRight className="w-4 h-4" />
+              </>
+            ) : step === (isPC ? 4 : 3) ? (
               <>
                 View Match
                 <Trophy className="w-4 h-4" />
