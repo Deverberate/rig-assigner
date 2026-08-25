@@ -132,3 +132,13 @@ export default function App() {
   return null;
 }
 
+import { Analytics } from '@vercel/analytics/react';
+
+export default function App() {
+  return (
+    <>
+      {/* your existing app code */}
+      <Analytics />
+    </>
+  );
+}
