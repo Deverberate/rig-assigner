@@ -55,6 +55,7 @@ import {
 } from "../utils/matcher";
 import { peripherals } from "../data/peripherals";
 import ComponentDetailModal from "./ComponentDetailModal";
+import { triggerLightHaptic, triggerMediumHaptic } from "../utils/haptics";
 
 // ─── Type guards ───────────────────────────────────────────────
 function isBuildPreset(p: BuildPreset | LaptopPreset | PhonePreset): p is BuildPreset {
@@ -215,6 +216,7 @@ export default function ResultsDashboard({
     .reduce((sum, p) => sum + p.price, 0);
 
   const togglePeripheral = useCallback((id: string) => {
+    triggerLightHaptic();
     setSelectedPeripherals((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -289,12 +291,14 @@ export default function ResultsDashboard({
   );
 
   const handleCopy = useCallback(async () => {
+    triggerMediumHaptic();
     await navigator.clipboard.writeText(buildCopyText(true));
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [buildCopyText]);
 
   const handleCopyPlain = useCallback(async () => {
+    triggerMediumHaptic();
     await navigator.clipboard.writeText(buildCopyText(false));
     setPlainCopied(true);
     setTimeout(() => setPlainCopied(false), 2000);
@@ -931,34 +935,38 @@ export default function ResultsDashboard({
             onClick={handleCopy}
             className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all duration-300"
           >
-            {copied ? (
-              <>
-                <Check className="w-4 h-4 text-green-400" />
-                <span className="text-green-400">Copied! {"\u2713"}</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-4 h-4" />
-                Copy Spec Sheet
-              </>
-            )}
+            <span className={copied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4 text-green-400" />
+                  <span className="text-green-400">Copied! ✓</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4" />
+                  Copy Spec Sheet
+                </>
+              )}
+            </span>
           </button>
 
           <button
             onClick={handleCopyPlain}
             className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all duration-300"
           >
-            {plainCopied ? (
-              <>
-                <Check className="w-4 h-4 text-green-400" />
-                <span className="text-green-400">Copied! {"\u2713"}</span>
-              </>
-            ) : (
-              <>
-                <FileText className="w-4 h-4" />
-                Copy Plain Text
-              </>
-            )}
+            <span className={plainCopied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
+              {plainCopied ? (
+                <>
+                  <Check className="w-4 h-4 text-green-400" />
+                  <span className="text-green-400">Copied! ✓</span>
+                </>
+              ) : (
+                <>
+                  <FileText className="w-4 h-4" />
+                  Copy Plain Text
+                </>
+              )}
+            </span>
           </button>
 
           <button

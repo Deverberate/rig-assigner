@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Search, SlidersHorizontal, Check, AlertCircle } from "lucide-react";
+import { X, Search, SlidersHorizontal, Check, AlertCircle, SearchX } from "lucide-react";
 import type { PartCatalogItem, PartCategory } from "../types";
 import ProductImage from "./ProductImage";
+import { triggerLightHaptic } from "../utils/haptics";
 
 interface PartSelectorModalProps {
   isOpen: boolean;
@@ -176,8 +177,17 @@ export default function PartSelectorModal({
             {/* Parts List */}
             <div className="flex-1 overflow-y-auto px-5 py-3 space-y-2">
               {filtered.length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-sm text-slate-500">No parts match your filters.</p>
+                <div className="flex flex-col items-center justify-center py-12 px-4">
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="w-20 h-20 rounded-2xl bg-slate-800/50 border border-slate-700/50 flex items-center justify-center mb-4"
+                  >
+                    <SearchX className="w-10 h-10 text-slate-600" />
+                  </motion.div>
+                  <p className="text-sm font-medium text-slate-400 mb-1">No compatible components found</p>
+                  <p className="text-xs text-slate-600">Try loosening brand or search filters</p>
                 </div>
               ) : (
                 filtered.map((part) => {
@@ -186,7 +196,7 @@ export default function PartSelectorModal({
                   return (
                     <button
                       key={part.id}
-                      onClick={() => { onSelect(part); onClose(); }}
+                      onClick={() => { triggerLightHaptic(); onSelect(part); onClose(); }}
                       className={`w-full text-left rounded-xl border p-3 transition-all duration-200 group flex items-start gap-3 ${
                         isSelected
                           ? "border-cyan-500/40 bg-cyan-500/5"

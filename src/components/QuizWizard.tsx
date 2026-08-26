@@ -37,6 +37,7 @@ import type {
   FormFactor,
   UserPreferences,
 } from "../types";
+import { triggerLightHaptic, triggerMediumHaptic, triggerSuccessHaptic } from "../utils/haptics";
 
 interface OptionCard {
   value: string;
@@ -386,6 +387,7 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
 
   const handleNext = () => {
     if (showModeSelect) return;
+    triggerMediumHaptic();
     if (step === 0) {
       setDirection(1);
       prevStepRef.current = 0;
@@ -396,6 +398,7 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
     if (step < maxStep) {
       goToStep(step + 1);
     } else if (primaryUse && budget && formFactor) {
+      triggerSuccessHaptic();
       onComplete({
         deviceCategory: deviceCategory!,
         primaryUse,
@@ -407,6 +410,7 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
   };
 
   const handleBack = () => {
+    triggerLightHaptic();
     if (showModeSelect) {
       setDeviceCategory(null);
       return;
@@ -433,6 +437,7 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
   };
 
   const handleCardSelect = (value: string) => {
+    triggerLightHaptic();
     if (step === 0) {
       setDeviceCategory(value as DeviceCategory);
       setPrimaryUse(null);
@@ -693,7 +698,12 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
                     </div>
                   </div>
                   {isSelected && (
-                    <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
+                    <motion.div
+                      className="absolute top-3 right-3 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                    />
                   )}
                 </motion.button>
               );

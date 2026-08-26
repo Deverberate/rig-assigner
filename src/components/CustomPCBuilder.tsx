@@ -30,6 +30,7 @@ import PartSelectorModal from "./PartSelectorModal";
 import ProductImage from "./ProductImage";
 import { checkCompatibility, getCategorySeverity, getCategoryIssues } from "../utils/compatibility";
 import { autoSync, getLastUpdatedLabel, isSyncActive } from "../utils/priceSync";
+import { triggerLightHaptic, triggerMediumHaptic } from "../utils/haptics";
 
 // ─── Icon map for categories ─────────────────────────────────
 const CATEGORY_ICONS: Record<PartCategory, LucideIcon> = {
@@ -125,10 +126,12 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
   };
 
   const handleSelect = useCallback((part: PartCatalogItem) => {
+    triggerLightHaptic();
     setSelectedParts((prev) => ({ ...prev, [part.category]: part }));
   }, []);
 
   const handleRemove = useCallback((cat: PartCategory) => {
+    triggerLightHaptic();
     setSelectedParts((prev) => ({ ...prev, [cat]: null }));
   }, []);
 
@@ -183,18 +186,21 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
   }, [selectedParts, totalPrice, totalWattage, recommendedPSU]);
 
   const handleCopy = useCallback(async () => {
+    triggerMediumHaptic();
     await navigator.clipboard.writeText(buildMarkdown());
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [buildMarkdown]);
 
   const handleCopyPlain = useCallback(async () => {
+    triggerMediumHaptic();
     await navigator.clipboard.writeText(buildPlainText());
     setPlainCopied(true);
     setTimeout(() => setPlainCopied(false), 2000);
   }, [buildPlainText]);
 
   const handleShareUrl = useCallback(async () => {
+    triggerMediumHaptic();
     const url = new URL(window.location.href);
     url.searchParams.set("mode", "builder");
     const partIds = PART_CATEGORY_ORDER
@@ -407,8 +413,8 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
                   </>
                 ) : (
                   <button
-                    onClick={() => setModalCategory(cat)}
-                    className="w-full mt-1 flex items-center justify-center gap-1.5 px-3 py-3 rounded-lg text-sm font-medium text-cyan-400 border border-dashed border-cyan-500/30 hover:border-cyan-500/60 hover:bg-cyan-500/5 transition-all"
+                    onClick={() => { triggerLightHaptic(); setModalCategory(cat); }}
+                    className="w-full mt-1 flex items-center justify-center gap-1.5 px-3 py-3 rounded-lg text-sm font-medium text-cyan-400/70 border border-dashed border-cyan-500/20 hover:border-cyan-500/50 hover:bg-cyan-500/5 hover:text-cyan-400 transition-all animate-pulse-slow"
                   >
                     <Plus className="w-4 h-4" />
                     Choose {label}
@@ -459,31 +465,37 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
             onClick={handleCopy}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all"
           >
-            {copied ? (
-              <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied! ✓</span></>
-            ) : (
-              <><Copy className="w-4 h-4" />Copy Markdown</>
-            )}
+            <span className={copied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
+              {copied ? (
+                <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied! ✓</span></>
+              ) : (
+                <><Copy className="w-4 h-4" />Copy Markdown</>
+              )}
+            </span>
           </button>
           <button
             onClick={handleCopyPlain}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all"
           >
-            {plainCopied ? (
-              <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied! ✓</span></>
-            ) : (
-              <><FileText className="w-4 h-4" />Copy Plain Text</>
-            )}
+            <span className={plainCopied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
+              {plainCopied ? (
+                <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied! ✓</span></>
+              ) : (
+                <><FileText className="w-4 h-4" />Copy Plain Text</>
+              )}
+            </span>
           </button>
           <button
             onClick={handleShareUrl}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all"
           >
-            {urlCopied ? (
-              <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Link Copied! ✓</span></>
-            ) : (
-              <><Link2 className="w-4 h-4" />Save / Share URL</>
-            )}
+            <span className={urlCopied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
+              {urlCopied ? (
+                <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Link Copied! ✓</span></>
+              ) : (
+                <><Link2 className="w-4 h-4" />Save / Share URL</>
+              )}
+            </span>
           </button>
           <button
             onClick={handleReset}
