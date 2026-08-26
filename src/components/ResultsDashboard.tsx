@@ -4,7 +4,7 @@ import {
   Trophy,
   Cpu,
   Box,
-  Copy,
+  Download,
   Check,
   ArrowDown,
   ArrowUp,
@@ -15,7 +15,6 @@ import {
   Plug,
   Fan,
   LayoutGrid,
-  ExternalLink,
   FileText,
   Gauge,
   Zap,
@@ -290,16 +289,30 @@ export default function ResultsDashboard({
     [activePreset, deviceCategory, selectedPeripherals, peripheralTotal]
   );
 
-  const handleCopy = useCallback(async () => {
+  const handleDownload = useCallback(() => {
     triggerMediumHaptic();
-    await navigator.clipboard.writeText(buildCopyText(true));
+    const text = buildCopyText(true);
+    const blob = new Blob([text], { type: "text/markdown;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rig-assigner-build.md";
+    a.click();
+    URL.revokeObjectURL(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [buildCopyText]);
 
-  const handleCopyPlain = useCallback(async () => {
+  const handleDownloadPlain = useCallback(() => {
     triggerMediumHaptic();
-    await navigator.clipboard.writeText(buildCopyText(false));
+    const text = buildCopyText(false);
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rig-spec-sheet.txt";
+    a.click();
+    URL.revokeObjectURL(url);
     setPlainCopied(true);
     setTimeout(() => setPlainCopied(false), 2000);
   }, [buildCopyText]);
@@ -310,18 +323,6 @@ export default function ResultsDashboard({
     setShowComparison(false);
     setCompareTargetId(null);
   }, [activePreset]);
-
-  // ─── External links (PC only) ───────────────────────────────
-  const pcpartpickerUrl = isBuildPreset(activePreset)
-    ? `https://pcpartpicker.com/search/?q=${encodeURIComponent(activePreset.cpu.spec.split("(")[0].trim() + " " + activePreset.gpu.spec.split("(")[0].trim())}`
-    : "";
-  const amazonUrl = `https://www.amazon.com/s?k=${encodeURIComponent(
-    isBuildPreset(activePreset)
-      ? activePreset.cpu.spec.split("(")[0].trim()
-      : isLaptopPreset(activePreset)
-        ? activePreset.title
-        : activePreset.title
-  )}`;
 
   // ─── Comparison data (PC only) ──────────────────────────────
   const hasPrevious = isBuildPreset(activePreset) && !!activePreset.previousBuild;
@@ -932,38 +933,38 @@ export default function ResultsDashboard({
         {/* ── Action buttons ── */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6 flex-wrap">
           <button
-            onClick={handleCopy}
+            onClick={handleDownload}
             className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all duration-300"
           >
             <span className={copied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {copied ? (
                 <>
                   <Check className="w-4 h-4 text-green-400" />
-                  <span className="text-green-400">Copied! ✓</span>
+                  <span className="text-green-400">Downloaded! ✓</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-4 h-4" />
-                  Copy Spec Sheet
+                  <Download className="w-4 h-4" />
+                  Download Spec Sheet
                 </>
               )}
             </span>
           </button>
 
           <button
-            onClick={handleCopyPlain}
+            onClick={handleDownloadPlain}
             className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all duration-300"
           >
             <span className={plainCopied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {plainCopied ? (
                 <>
                   <Check className="w-4 h-4 text-green-400" />
-                  <span className="text-green-400">Copied! ✓</span>
+                  <span className="text-green-400">Downloaded! ✓</span>
                 </>
               ) : (
                 <>
                   <FileText className="w-4 h-4" />
-                  Copy Plain Text
+                  Download Plain Text
                 </>
               )}
             </span>
@@ -978,30 +979,7 @@ export default function ResultsDashboard({
           </button>
         </div>
 
-        {/* ── External Links ── */}
-        <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
-          {isBuildPreset(activePreset) && (
-            <a
-              href={pcpartpickerUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-slate-700 bg-slate-900/60 hover:bg-slate-800 hover:border-emerald-500/50 text-slate-400 hover:text-emerald-400 transition-all duration-300"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Search on PCPartPicker
-            </a>
-          )}
 
-          <a
-            href={amazonUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-slate-700 bg-slate-900/60 hover:bg-slate-800 hover:border-amber-500/50 text-slate-400 hover:text-amber-400 transition-all duration-300"
-          >
-            <ExternalLink className="w-4 h-4" />
-            Search on Amazon
-          </a>
-        </div>
 
         {/* ── Total Setup Cost (if peripherals selected) ── */}
         {selectedPeripherals.size > 0 && (

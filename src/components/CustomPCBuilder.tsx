@@ -12,7 +12,6 @@ import {
   ArrowLeftRight,
   Trash2,
   RotateCcw,
-  Copy,
   Check,
   FileText,
   Link2,
@@ -185,16 +184,30 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
     return lines.join("\n");
   }, [selectedParts, totalPrice, totalWattage, recommendedPSU]);
 
-  const handleCopy = useCallback(async () => {
+  const handleDownload = useCallback(() => {
     triggerMediumHaptic();
-    await navigator.clipboard.writeText(buildMarkdown());
+    const text = buildMarkdown();
+    const blob = new Blob([text], { type: "text/markdown;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rig-assigner-build.md";
+    a.click();
+    URL.revokeObjectURL(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [buildMarkdown]);
 
-  const handleCopyPlain = useCallback(async () => {
+  const handleDownloadPlain = useCallback(() => {
     triggerMediumHaptic();
-    await navigator.clipboard.writeText(buildPlainText());
+    const text = buildPlainText();
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rig-spec-sheet.txt";
+    a.click();
+    URL.revokeObjectURL(url);
     setPlainCopied(true);
     setTimeout(() => setPlainCopied(false), 2000);
   }, [buildPlainText]);
@@ -462,26 +475,26 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
         {/* ── Action Buttons ── */}
         <div className="flex flex-col sm:flex-row gap-2 mb-4 flex-wrap">
           <button
-            onClick={handleCopy}
+            onClick={handleDownload}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all"
           >
             <span className={copied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {copied ? (
-                <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied! ✓</span></>
+                <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Downloaded! ✓</span></>
               ) : (
-                <><Copy className="w-4 h-4" />Copy Markdown</>
+                <><Download className="w-4 h-4" />Download Markdown</>
               )}
             </span>
           </button>
           <button
-            onClick={handleCopyPlain}
+            onClick={handleDownloadPlain}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all"
           >
             <span className={plainCopied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {plainCopied ? (
-                <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied! ✓</span></>
+                <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Downloaded! ✓</span></>
               ) : (
-                <><FileText className="w-4 h-4" />Copy Plain Text</>
+                <><FileText className="w-4 h-4" />Download Plain Text</>
               )}
             </span>
           </button>
