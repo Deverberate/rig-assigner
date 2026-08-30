@@ -1,10 +1,26 @@
 /**
  * Lightweight client-side price sync utility.
  * Tracks last price check in localStorage and provides a "last updated" indicator.
+ * Uses APP_VERSION for cache-busting — when the version changes, stale data is cleared.
  */
 
+export const APP_VERSION = "1.0.0";
+const VERSION_KEY = "rigassigner_app_version";
 const STORAGE_KEY = "rigassigner_price_sync";
 const SYNC_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+/** Clear stale cache if the app version has changed. */
+function checkVersionBust(): void {
+  try {
+    const stored = localStorage.getItem(VERSION_KEY);
+    if (stored !== APP_VERSION) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(VERSION_KEY, APP_VERSION);
+    }
+  } catch {
+    // ignore
+  }
+}
 
 interface PriceSyncData {
   lastSyncTimestamp: number;
@@ -14,6 +30,7 @@ interface PriceSyncData {
 }
 
 function loadData(): PriceSyncData {
+  checkVersionBust();
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);

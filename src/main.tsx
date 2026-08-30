@@ -1,12 +1,17 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Analytics } from '@vercel/analytics/react'
+import ErrorBoundary from './components/ErrorBoundary'
+import FeedbackModal from './components/FeedbackModal'
 import './index.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+      <FeedbackModal />
+    </ErrorBoundary>
     <Analytics />
   </StrictMode>,
 )
