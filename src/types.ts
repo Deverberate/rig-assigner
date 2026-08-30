@@ -159,6 +159,18 @@ export interface PartCatalogItem {
   storeLinks?: StoreLink[];
 }
 
+/** Community feedback / review */
+export interface FeedbackReview {
+  id: string;
+  author: string;
+  rating: number;
+  category: "General" | "Missing Part" | "Price Inaccuracy" | "Feature Request";
+  text: string;
+  timestamp: string;
+  likes: number;
+  isLiked?: boolean;
+}
+
 /** App view modes */
 export type AppViewMode = "quiz" | "builder";
 
