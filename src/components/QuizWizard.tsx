@@ -530,12 +530,12 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
   const stepLabel = step === 0 ? "Device Category" : stepLabels[step - 1];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-shadow-grey-dark text-slate-100 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            <span className="text-cyan-400">Rig</span> Assigner
+            <span className="text-cinnabar-400">Rig</span> Assigner
           </h1>
           <p className="text-slate-400 mt-2">
             {step === 0
@@ -549,13 +549,13 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
           <div className="mb-8">
             <div className="flex items-center justify-between text-sm text-slate-400 mb-2">
               <span>
-                <span className="text-cyan-400 font-semibold">{stepDisplay}</span>
+                <span className="text-cinnabar-400 font-semibold">{stepDisplay}</span>
               </span>
               <span className="font-medium text-slate-300">{stepLabel}</span>
             </div>
-            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div className="h-2 bg-shadow-grey rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                className="h-full bg-gradient-to-r from-cinnabar-500 to-blue-500 rounded-full"
                 initial={false}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
@@ -571,10 +571,10 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
                   className={
                     "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 " +
                     (s < step
-                      ? "bg-cyan-500 text-white cursor-pointer hover:bg-cyan-400"
+                      ? "bg-cinnabar-500 text-white cursor-pointer hover:bg-cinnabar-400"
                       : s === step
-                        ? "bg-cyan-500/20 border-2 border-cyan-400 text-cyan-400"
-                        : "bg-slate-800 text-slate-500 border border-slate-700")
+                        ? "bg-cinnabar-500/20 border-2 border-cinnabar-400 text-cinnabar-400"
+                        : "bg-shadow-grey text-slate-500 border border-shadow-grey-light")
                   }
                 >
                   {s < step ? "\u2713" : s}
@@ -600,14 +600,14 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
                 }}
                 whileTap={{ scale: 0.98 }}
                 whileHover={{ scale: 1.01 }}
-                className="group text-left rounded-xl p-6 border-2 border-slate-700 bg-slate-900/50 hover:border-cyan-500/50 hover:bg-slate-800/50 transition-colors duration-300"
+                className="group text-left rounded-xl p-6 border-2 border-shadow-grey-light bg-shadow-grey/50 hover:border-cinnabar-500/50 hover:bg-shadow-grey/50 transition-colors duration-300"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-800 text-slate-400 group-hover:text-cyan-400 group-hover:bg-cyan-500/10 flex items-center justify-center transition-colors duration-300">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-shadow-grey text-slate-400 group-hover:text-cinnabar-400 group-hover:bg-cinnabar-500/10 flex items-center justify-center transition-colors duration-300">
                     <Settings className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-base text-slate-200 group-hover:text-cyan-300 transition-colors duration-300">
+                    <h3 className="font-semibold text-base text-slate-200 group-hover:text-cinnabar-300 transition-colors duration-300">
                       Guided Rig Assigner
                     </h3>
                     <p className="text-sm text-slate-400 mt-1 leading-relaxed">
@@ -624,10 +624,10 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
                 }}
                 whileTap={{ scale: 0.98 }}
                 whileHover={{ scale: 1.01 }}
-                className="group text-left rounded-xl p-6 border-2 border-slate-700 bg-slate-900/50 hover:border-emerald-500/50 hover:bg-slate-800/50 transition-colors duration-300"
+                className="group text-left rounded-xl p-6 border-2 border-shadow-grey-light bg-shadow-grey/50 hover:border-emerald-500/50 hover:bg-shadow-grey/50 transition-colors duration-300"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-800 text-slate-400 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 flex items-center justify-center transition-colors duration-300">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-shadow-grey text-slate-400 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 flex items-center justify-center transition-colors duration-300">
                     <Wrench className="w-6 h-6" />
                   </div>
                   <div>
@@ -644,10 +644,10 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
           </div>
         )}
 
-        {/* Animated Option Cards */}
+        {/* Option Cards — slide only on step change, not device selection */}
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
-            key={`step-${step}-${deviceCategory}`}
+            key={`step-${step}`}
             custom={direction}
             variants={stepVariants}
             initial="enter"
@@ -660,25 +660,23 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
               const Icon = opt.icon;
               const isSelected = getSelectedValue() === opt.value;
               return (
-                <motion.button
+                <button
                   key={opt.value}
                   onClick={() => handleCardSelect(opt.value)}
-                  whileTap={{ scale: 0.98 }}
-                  whileHover={{ scale: 1.01 }}
                   className={
-                    "group relative text-left rounded-xl p-5 border-2 transition-colors duration-300 " +
+                    "group relative text-left rounded-xl p-5 border-2 transition-all duration-150 active:scale-[0.98] " +
                     (isSelected
-                      ? "border-cyan-400 bg-cyan-500/10 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
-                      : "border-slate-700 bg-slate-900/50 hover:border-slate-500 hover:bg-slate-800/50")
+                      ? "border-cinnabar-400 bg-cinnabar-500/10 shadow-[0_0_20px_rgba(239,62,54,0.15)]"
+                      : "border-shadow-grey-light bg-shadow-grey/50 hover:border-cinnabar-500/30 hover:bg-shadow-grey/80")
                   }
                 >
                   <div className="flex items-start gap-4">
                     <div
                       className={
-                        "flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-300 " +
+                        "flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-150 " +
                         (isSelected
-                          ? "bg-cyan-500/20 text-cyan-400"
-                          : "bg-slate-800 text-slate-400 group-hover:text-slate-300")
+                          ? "bg-cinnabar-500/20 text-cinnabar-400"
+                          : "bg-shadow-grey text-slate-400 group-hover:text-slate-300")
                       }
                     >
                       <Icon className="w-6 h-6" />
@@ -686,8 +684,8 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
                     <div className="min-w-0">
                       <h3
                         className={
-                          "font-semibold text-base transition-colors duration-300 " +
-                          (isSelected ? "text-cyan-300" : "text-slate-200")
+                          "font-semibold text-base transition-colors duration-150 " +
+                          (isSelected ? "text-cinnabar-300" : "text-slate-200")
                         }
                       >
                         {opt.label}
@@ -697,15 +695,16 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
                       </p>
                     </div>
                   </div>
-                  {isSelected && (
-                    <motion.div
-                      className="absolute top-3 right-3 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                    />
-                  )}
-                </motion.button>
+                  {/* Selection indicator dot — instant CSS pop, no Framer layout */}
+                  <span
+                    className={
+                      "absolute top-3 right-3 w-3 h-3 rounded-full transition-all duration-150 " +
+                      (isSelected
+                        ? "bg-cinnabar-400 shadow-[0_0_8px_rgba(239,62,54,0.6)] scale-100"
+                        : "bg-transparent shadow-none scale-0")
+                    }
+                  />
+                </button>
               );
             })}
           </motion.div>
@@ -719,7 +718,7 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
               "flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 " +
               (step === 0
                 ? "invisible"
-                : "text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-500")
+                : "text-slate-400 hover:text-slate-200 bg-shadow-grey hover:bg-slate-700 border border-shadow-grey-light hover:border-shadow-grey-light")
             }
           >
             <ChevronLeft className="w-4 h-4" />
@@ -732,8 +731,8 @@ export default function QuizWizard({ onComplete, onStartBuilder }: QuizWizardPro
             className={
               "flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 " +
               (canNext
-                ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:shadow-[0_0_25px_rgba(34,211,238,0.4)]"
-                : "bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700")
+                ? "bg-cinnabar-500 text-slate-950 hover:bg-cinnabar-400 shadow-[0_0_15px_rgba(239,62,54,0.3)] hover:shadow-[0_0_25px_rgba(239,62,54,0.4)]"
+                : "bg-shadow-grey text-slate-500 cursor-not-allowed border border-shadow-grey-light")
             }
           >
             {step === 0 ? (

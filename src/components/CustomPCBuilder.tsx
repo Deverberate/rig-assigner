@@ -121,7 +121,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
   const severityColors: Record<string, string> = {
     error: "border-red-500/40 bg-red-500/5 shadow-[0_0_12px_rgba(239,68,68,0.1)]",
     warning: "border-amber-500/40 bg-amber-500/5 shadow-[0_0_12px_rgba(245,158,11,0.08)]",
-    info: "border-cyan-500/30 bg-slate-900/80 shadow-[0_0_12px_rgba(34,211,238,0.05)]",
+    info: "border-cinnabar-500/30 bg-shadow-grey/80 shadow-[0_0_12px_rgba(239,62,54,0.05)]",
   };
 
   const handleSelect = useCallback((part: PartCatalogItem) => {
@@ -228,22 +228,22 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
   }, [selectedParts]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-shadow-grey-dark text-slate-100">
       {/* ── Sticky Header ── */}
-      <div className="sticky top-0 z-40 bg-slate-950/95 backdrop-blur-sm border-b border-slate-800">
+      <div className="sticky top-0 z-40 bg-shadow-grey-dark/95 backdrop-blur-sm border-b border-slate-800">
         <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <button
                 onClick={onBack}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-slate-400 hover:text-slate-200 bg-shadow-grey hover:bg-slate-700 border border-shadow-grey-light transition-all"
               >
                 <ArrowLeftRight className="w-3.5 h-3.5" />
                 Switch Mode
               </button>
               <div>
                 <h1 className="text-lg font-bold">
-                  <span className="text-cyan-400">Rig</span> Workbench
+                  <span className="text-cinnabar-400">Rig</span> Workbench
                 </h1>
                 <p className="text-[11px] text-slate-500">
                   {filledCount}/8 parts selected
@@ -266,7 +266,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-xs text-slate-500 uppercase tracking-wider">Total</p>
-                <p className="text-xl font-bold text-cyan-400">${totalPrice.toLocaleString()}</p>
+                <p className="text-xl font-bold text-cinnabar-400">${totalPrice.toLocaleString()}</p>
               </div>
               {totalWattage > 0 && (
                 <div className="text-right hidden sm:block">
@@ -295,7 +295,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
               ? "border-red-500/30 bg-red-500/5"
               : warningCount > 0
                 ? "border-amber-500/30 bg-amber-500/5"
-                : "border-cyan-500/20 bg-cyan-500/5"
+                : "border-cinnabar-500/20 bg-cinnabar-500/5"
           }`}>
             <div className="flex items-center gap-2 mb-2">
               {errorCount > 0 ? (
@@ -303,11 +303,11 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
               ) : warningCount > 0 ? (
                 <AlertTriangle className="w-4 h-4 text-amber-400" />
               ) : (
-                <Info className="w-4 h-4 text-cyan-400" />
+                <Info className="w-4 h-4 text-cinnabar-400" />
               )}
               <span className={`text-sm font-semibold ${
                 errorCount > 0 ? "text-red-400" :
-                warningCount > 0 ? "text-amber-400" : "text-cyan-400"
+                warningCount > 0 ? "text-amber-400" : "text-cinnabar-400"
               }`}>
                 {errorCount > 0
                   ? `${errorCount} compatibility issue${errorCount > 1 ? "s" : ""} found`
@@ -358,9 +358,9 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
             if (part && catSeverity) {
               cardClass += severityColors[catSeverity];
             } else if (part) {
-              cardClass += "border-cyan-500/30 bg-slate-900/80 shadow-[0_0_12px_rgba(34,211,238,0.05)]";
+              cardClass += "border-cinnabar-500/30 bg-shadow-grey/80 shadow-[0_0_12px_rgba(239,62,54,0.05)]";
             } else {
-              cardClass += "border-slate-700 bg-slate-900/40 border-dashed";
+              cardClass += "border-shadow-grey-light bg-shadow-grey/40 border-dashed";
             }
 
             return (
@@ -368,7 +368,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
                 <div className="flex items-center gap-2 mb-2">
                   <div
                     className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
-                      part ? "bg-cyan-500/15 text-cyan-400" : "bg-slate-800 text-slate-500"
+                      part ? "bg-cinnabar-500/15 text-cinnabar-400" : "bg-shadow-grey text-slate-500"
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -384,12 +384,12 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
                       src={part.imageUrl}
                       alt={part.name}
                       category={cat}
-                      className="w-12 h-12 mb-2 border border-slate-700/50"
+                      className="w-12 h-12 mb-2 border border-shadow-grey-light/50"
                     />
                     <p className="text-sm font-medium text-slate-200 leading-snug mb-1 line-clamp-2">
                       {part.name}
                     </p>
-                    <p className="text-xs text-cyan-400 font-bold mb-2">
+                    <p className="text-xs text-cinnabar-400 font-bold mb-2">
                       ${part.priceUSD.toLocaleString()}
                     </p>
                     {/* Compatibility issue badges */}
@@ -399,10 +399,10 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
                           <div key={i} className="flex items-start gap-1.5">
                             {issue.severity === "error" && <AlertCircle className="w-3 h-3 text-red-400 mt-0.5 flex-shrink-0" />}
                             {issue.severity === "warning" && <AlertTriangle className="w-3 h-3 text-amber-400 mt-0.5 flex-shrink-0" />}
-                            {issue.severity === "info" && <Info className="w-3 h-3 text-cyan-400 mt-0.5 flex-shrink-0" />}
+                            {issue.severity === "info" && <Info className="w-3 h-3 text-cinnabar-400 mt-0.5 flex-shrink-0" />}
                             <p className={`text-[10px] leading-snug ${
                               issue.severity === "error" ? "text-red-400" :
-                              issue.severity === "warning" ? "text-amber-400" : "text-cyan-400"
+                              issue.severity === "warning" ? "text-amber-400" : "text-cinnabar-400"
                             }`}>{issue.message}</p>
                           </div>
                         ))}
@@ -411,14 +411,14 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
                     <div className="flex gap-1.5">
                       <button
                         onClick={() => handleSwap(cat)}
-                        className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-medium bg-slate-800 border border-slate-700 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-all"
+                        className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-medium bg-shadow-grey border border-shadow-grey-light text-slate-400 hover:text-cinnabar-400 hover:border-cinnabar-500/30 transition-all"
                       >
                         <ArrowLeftRight className="w-3 h-3" />
                         Swap
                       </button>
                       <button
                         onClick={() => handleRemove(cat)}
-                        className="flex items-center justify-center px-2 py-1.5 rounded-lg text-[11px] bg-slate-800 border border-slate-700 text-slate-400 hover:text-red-400 hover:border-red-500/30 transition-all"
+                        className="flex items-center justify-center px-2 py-1.5 rounded-lg text-[11px] bg-shadow-grey border border-shadow-grey-light text-slate-400 hover:text-red-400 hover:border-red-500/30 transition-all"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
@@ -427,7 +427,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
                 ) : (
                   <button
                     onClick={() => { triggerLightHaptic(); setModalCategory(cat); }}
-                    className="w-full mt-1 flex items-center justify-center gap-1.5 px-3 py-3 rounded-lg text-sm font-medium text-cyan-400/70 border border-dashed border-cyan-500/20 hover:border-cyan-500/50 hover:bg-cyan-500/5 hover:text-cyan-400 transition-all animate-pulse-slow"
+                    className="w-full mt-1 flex items-center justify-center gap-1.5 px-3 py-3 rounded-lg text-sm font-medium text-cinnabar-400/70 border border-dashed border-cinnabar-500/20 hover:border-cinnabar-500/50 hover:bg-cinnabar-500/5 hover:text-cinnabar-400 transition-all animate-pulse-slow"
                   >
                     <Plus className="w-4 h-4" />
                     Choose {label}
@@ -440,7 +440,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
 
         {/* ── Power Budget Bar ── */}
         {totalWattage > 0 && (
-          <div className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 mb-6">
+          <div className="rounded-xl border border-shadow-grey-light bg-shadow-grey/60 p-4 mb-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
                 Power Budget
@@ -449,7 +449,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
                 {totalWattage}W / {recommendedPSU}W+
               </span>
             </div>
-            <div className="h-2.5 bg-slate-800 rounded-full overflow-hidden">
+            <div className="h-2.5 bg-shadow-grey rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-500"
                 style={{
@@ -476,7 +476,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
         <div className="flex flex-col sm:flex-row gap-2 mb-4 flex-wrap">
           <button
             onClick={handleDownload}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-shadow-grey-light bg-shadow-grey hover:bg-slate-700 hover:border-cinnabar-500/50 text-slate-300 hover:text-slate-100 transition-all"
           >
             <span className={copied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {copied ? (
@@ -488,7 +488,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
           </button>
           <button
             onClick={handleDownloadPlain}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-shadow-grey-light bg-shadow-grey hover:bg-slate-700 hover:border-cinnabar-500/50 text-slate-300 hover:text-slate-100 transition-all"
           >
             <span className={plainCopied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {plainCopied ? (
@@ -500,7 +500,7 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
           </button>
           <button
             onClick={handleShareUrl}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border border-shadow-grey-light bg-shadow-grey hover:bg-slate-700 hover:border-cinnabar-500/50 text-slate-300 hover:text-slate-100 transition-all"
           >
             <span className={urlCopied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {urlCopied ? (
@@ -521,10 +521,10 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
 
         {/* ── Export Summary ── */}
         {filledCount > 0 && (
-          <div className="rounded-xl border border-slate-700 bg-slate-900/60 p-5">
+          <div className="rounded-xl border border-shadow-grey-light bg-shadow-grey/60 p-5">
             <div className="flex items-center gap-2 mb-3">
-              <Download className="w-4 h-4 text-cyan-400" />
-              <span className="text-xs text-cyan-400 uppercase tracking-wider font-semibold">
+              <Download className="w-4 h-4 text-cinnabar-400" />
+              <span className="text-xs text-cinnabar-400 uppercase tracking-wider font-semibold">
                 Build Summary
               </span>
             </div>
@@ -536,14 +536,14 @@ export default function CustomPCBuilder({ onBack, initialParts }: CustomPCBuilde
                   <div key={cat} className="flex items-center justify-between text-sm">
                     <span className="text-slate-500">{PART_CATEGORY_LABELS[cat]}</span>
                     <span className="text-slate-300 font-medium">{part.name}</span>
-                    <span className="text-cyan-400 font-bold ml-3">${part.priceUSD}</span>
+                    <span className="text-cinnabar-400 font-bold ml-3">${part.priceUSD}</span>
                   </div>
                 );
               })}
             </div>
-            <div className="mt-3 pt-3 border-t border-slate-700/50 flex items-center justify-between">
+            <div className="mt-3 pt-3 border-t border-shadow-grey-light/50 flex items-center justify-between">
               <span className="text-sm font-semibold text-slate-300">Total</span>
-              <span className="text-xl font-bold text-cyan-400">${totalPrice.toLocaleString()}</span>
+              <span className="text-xl font-bold text-cinnabar-400">${totalPrice.toLocaleString()}</span>
             </div>
           </div>
         )}

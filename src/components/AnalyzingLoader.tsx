@@ -55,16 +55,16 @@ export default function AnalyzingLoader({ onComplete }: AnalyzingLoaderProps) {
   }, [onComplete]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-shadow-grey-dark text-slate-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md text-center">
         {/* Pulsing chip icon */}
         <div className="relative mx-auto mb-8 w-24 h-24 flex items-center justify-center">
           {/* Outer glow ring */}
-          <div className="absolute inset-0 rounded-full bg-cyan-500/10 animate-ping" />
-          <div className="absolute inset-2 rounded-full bg-cyan-500/5" />
+          <div className="absolute inset-0 rounded-full bg-cinnabar-500/10 animate-ping" />
+          <div className="absolute inset-2 rounded-full bg-cinnabar-500/5" />
           {/* Icon */}
-          <div className="relative z-10 w-16 h-16 rounded-xl bg-slate-800 border border-cyan-500/30 flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)]">
-            <Cpu className="w-8 h-8 text-cyan-400 animate-pulse" />
+          <div className="relative z-10 w-16 h-16 rounded-xl bg-shadow-grey border border-cinnabar-500/30 flex items-center justify-center shadow-[0_0_30px_rgba(239,62,54,0.2)]">
+            <Cpu className="w-8 h-8 text-cinnabar-400 animate-pulse" />
           </div>
         </div>
 
@@ -74,9 +74,9 @@ export default function AnalyzingLoader({ onComplete }: AnalyzingLoaderProps) {
         </h2>
 
         {/* Progress bar */}
-        <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden mb-6">
+        <div className="h-1.5 bg-shadow-grey rounded-full overflow-hidden mb-6">
           <div
-            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-100 ease-linear"
+            className="h-full bg-gradient-to-r from-cinnabar-500 to-blue-500 rounded-full transition-all duration-100 ease-linear"
             style={{ width: `${progress}%` }}
           />
         </div>

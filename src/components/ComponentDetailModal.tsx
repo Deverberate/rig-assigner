@@ -543,7 +543,7 @@ export default function ComponentDetailModal({
           style={{ backdropFilter: "blur(8px)" }}
         >
           <motion.div
-            className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl"
+            className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl border border-shadow-grey-light bg-shadow-grey shadow-2xl"
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
@@ -551,22 +551,22 @@ export default function ComponentDetailModal({
             onClick={(e) => e.stopPropagation()}
           >
             {/* ── Header ── */}
-            <div className="sticky top-0 z-10 flex items-center gap-3 px-5 py-4 bg-slate-900 border-b border-slate-700/50 rounded-t-2xl">
+            <div className="sticky top-0 z-10 flex items-center gap-3 px-5 py-4 bg-shadow-grey border-b border-shadow-grey-light/50 rounded-t-2xl">
               <ProductImage
                 src={part.imageUrl}
                 alt={lookupKey}
                 category="cpu"
-                className="flex-shrink-0 w-14 h-14 rounded-xl border border-slate-700/50"
+                className="flex-shrink-0 w-14 h-14 rounded-xl border border-shadow-grey-light/50"
               />
               <div className="min-w-0 flex-1">
                 <h3 className="text-lg font-bold text-slate-100 leading-tight truncate">{lookupKey}</h3>
-                <span className="inline-block mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20 uppercase tracking-wider">
+                <span className="inline-block mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cinnabar-500/15 text-cinnabar-400 border border-cinnabar-500/20 uppercase tracking-wider">
                   {detail.categoryBadge}
                 </span>
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition-all"
+                className="w-8 h-8 rounded-lg bg-shadow-grey flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition-all"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -586,16 +586,16 @@ export default function ComponentDetailModal({
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between px-3 py-2.5 rounded-lg border border-slate-700/50 bg-slate-800/50 hover:border-cyan-500/30 hover:bg-slate-800 transition-all group"
+                      className="flex items-center justify-between px-3 py-2.5 rounded-lg border border-shadow-grey-light/50 bg-shadow-grey/50 hover:border-cinnabar-500/30 hover:bg-shadow-grey transition-all group"
                     >
-                      <span className="text-sm font-medium text-slate-300 group-hover:text-cyan-400 transition-colors">
+                      <span className="text-sm font-medium text-slate-300 group-hover:text-cinnabar-400 transition-colors">
                         {link.store}
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-cyan-400">
+                        <span className="text-sm font-bold text-cinnabar-400">
                           ${link.price > 0 ? link.price.toLocaleString() : part.estimatedPrice.toLocaleString()}
                         </span>
-                        <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 transition-colors" />
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-cinnabar-400 transition-colors" />
                       </div>
                     </a>
                   ))}
@@ -608,12 +608,12 @@ export default function ComponentDetailModal({
                   <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold mb-2">
                     Key Technical Specifications
                   </p>
-                  <div className="rounded-lg border border-slate-700/50 overflow-hidden">
+                  <div className="rounded-lg border border-shadow-grey-light/50 overflow-hidden">
                     {detail.specs.map((spec, i) => (
                       <div
                         key={i}
                         className={`flex items-center justify-between px-3 py-2.5 ${
-                          i % 2 === 0 ? "bg-slate-800/30" : "bg-slate-800/10"
+                          i % 2 === 0 ? "bg-shadow-grey/30" : "bg-shadow-grey/10"
                         }`}
                       >
                         <span className="text-xs text-slate-500 font-medium">{spec.label}</span>
@@ -660,8 +660,8 @@ export default function ComponentDetailModal({
               </div>
 
               {/* ── Why This Fits Your Workload ── */}
-              <div className="rounded-lg bg-cyan-500/5 border border-cyan-500/15 p-4">
-                <p className="text-[11px] text-cyan-400 uppercase tracking-wider font-semibold mb-1.5">
+              <div className="rounded-lg bg-cinnabar-500/5 border border-cinnabar-500/15 p-4">
+                <p className="text-[11px] text-cinnabar-400 uppercase tracking-wider font-semibold mb-1.5">
                   Why This Fits Your Workload
                 </p>
                 <p className="text-sm text-slate-300 leading-relaxed">{detail.workloadReason}</p>

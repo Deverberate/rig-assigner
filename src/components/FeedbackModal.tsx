@@ -8,12 +8,12 @@ import {
   ArrowUpDown,
   Send,
 } from "lucide-react";
-import { initialFeedback } from "../data/initialFeedback";
 import type { FeedbackReview } from "../types";
 import { triggerLightHaptic, triggerSuccessHaptic } from "../utils/haptics";
 
-const STORAGE_KEY = "rigassigner-feedback";
+const STORAGE_KEY = "rigassigner-feedback-v2";
 const LIKES_KEY = "rigassigner-liked-reviews";
+const OLD_STORAGE_KEY = "rigassigner-feedback";
 
 const CATEGORIES = [
   "All",
@@ -26,6 +26,20 @@ const CATEGORIES = [
 type SortMode = "popular" | "newest" | "highest";
 
 function loadReviews(): FeedbackReview[] {
+  // One-time migration: purge old seed data stored under legacy key
+  try {
+    const oldStored = localStorage.getItem(OLD_STORAGE_KEY);
+    if (oldStored) {
+      const oldReviews = JSON.parse(oldStored) as FeedbackReview[];
+      // Old seeds had IDs like fb-1..fb-6 — remove them all
+      const hasSeeds = oldReviews.some((r) => /^fb-[1-6]$/.test(r.id));
+      if (hasSeeds) {
+        localStorage.removeItem(OLD_STORAGE_KEY);
+      }
+    }
+  } catch {
+    // ignore
+  }
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -34,7 +48,7 @@ function loadReviews(): FeedbackReview[] {
   } catch {
     // corrupt data
   }
-  return [...initialFeedback];
+  return [];
 }
 
 function saveReviews(reviews: FeedbackReview[]) {
@@ -109,7 +123,7 @@ function RatingBar({ count, total, stars }: { count: number; total: number; star
     <div className="flex items-center gap-2 text-[11px] text-slate-500">
       <span className="w-3 text-right">{stars}</span>
       <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-      <div className="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+      <div className="flex-1 h-1.5 bg-shadow-grey rounded-full overflow-hidden">
         <div
           className="h-full bg-amber-400/70 rounded-full transition-all duration-500"
           style={{ width: `${pct}%` }}
@@ -231,7 +245,7 @@ export default function FeedbackModal() {
     General: "bg-slate-700/50 text-slate-400 border-slate-600",
     "Missing Part": "bg-amber-500/10 text-amber-400 border-amber-500/20",
     "Price Inaccuracy": "bg-red-500/10 text-red-400 border-red-500/20",
-    "Feature Request": "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+    "Feature Request": "bg-cinnabar-500/10 text-cinnabar-400 border-cinnabar-500/20",
   };
 
   return (
@@ -239,7 +253,7 @@ export default function FeedbackModal() {
       {/* Floating trigger button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-5 right-5 z-50 h-12 px-4 rounded-full bg-slate-800 border border-slate-700 text-slate-400 hover:text-amber-400 hover:border-amber-500/50 hover:bg-slate-700 shadow-lg transition-all duration-200 flex items-center gap-2 text-sm font-medium"
+        className="fixed bottom-5 right-5 z-50 h-12 px-4 rounded-full bg-shadow-grey border border-shadow-grey-light text-slate-400 hover:text-amber-400 hover:border-amber-500/50 hover:bg-slate-700 shadow-lg transition-all duration-200 flex items-center gap-2 text-sm font-medium"
         aria-label="Open reviews and feedback"
       >
         <MessageSquareText className="w-4 h-4" />
@@ -258,7 +272,7 @@ export default function FeedbackModal() {
           }}
           className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
         >
-          <div className="w-full max-w-lg max-h-[85vh] bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="w-full max-w-lg max-h-[85vh] bg-shadow-grey border border-shadow-grey-light rounded-2xl shadow-2xl flex flex-col overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800 shrink-0">
               <div className="flex items-center gap-2">
@@ -269,7 +283,7 @@ export default function FeedbackModal() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all"
+                className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 hover:bg-shadow-grey transition-all"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -319,7 +333,7 @@ export default function FeedbackModal() {
                       }}
                       className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-all ${
                         sortMode === s.key
-                          ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30"
+                          ? "bg-cinnabar-500/10 text-cinnabar-400 border border-cinnabar-500/30"
                           : "text-slate-500 hover:text-slate-300 border border-transparent"
                       }`}
                     >
@@ -352,14 +366,26 @@ export default function FeedbackModal() {
               {/* Review list */}
               <div className="divide-y divide-slate-800/50">
                 {filteredReviews.length === 0 ? (
-                  <div className="px-5 py-10 text-center text-slate-600 text-sm">
-                    No reviews in this category yet.
+                  <div className="px-5 py-12 text-center">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-shadow-grey-light/30 border border-shadow-grey-light/50 flex items-center justify-center">
+                      <MessageSquareText className="w-6 h-6 text-shadow-grey-400" />
+                    </div>
+                    <p className="text-sm font-medium text-slate-400">
+                      {reviews.length === 0
+                        ? "No reviews yet. Be the first to share your build feedback!"
+                        : "No reviews in this category yet."}
+                    </p>
+                    {reviews.length === 0 && (
+                      <p className="text-xs text-slate-600 mt-1.5">
+                        Click \"Leave a Review\" below to get started.
+                      </p>
+                    )}
                   </div>
                 ) : (
                   filteredReviews.map((review) => {
                     const isLiked = likedIds.has(review.id);
                     return (
-                      <div key={review.id} className="px-5 py-4 hover:bg-slate-800/20 transition-colors">
+                      <div key={review.id} className="px-5 py-4 hover:bg-shadow-grey/20 transition-colors">
                         {/* Author + meta row */}
                         <div className="flex items-center justify-between mb-1.5">
                           <div className="flex items-center gap-2">
@@ -395,12 +421,12 @@ export default function FeedbackModal() {
                           onClick={() => handleLike(review.id)}
                           className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium transition-all border ${
                             isLiked
-                              ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/20"
-                              : "text-slate-500 hover:text-slate-300 border-transparent hover:bg-slate-800"
+                              ? "bg-cinnabar-500/10 text-cinnabar-400 border-cinnabar-500/20"
+                              : "text-slate-500 hover:text-slate-300 border-transparent hover:bg-shadow-grey"
                           }`}
                         >
                           <ThumbsUp
-                            className={`w-3 h-3 ${isLiked ? "fill-cyan-400" : ""}`}
+                            className={`w-3 h-3 ${isLiked ? "fill-cinnabar-400" : ""}`}
                           />
                           {review.likes}
                         </button>
@@ -419,7 +445,7 @@ export default function FeedbackModal() {
                     triggerLightHaptic();
                     setFormOpen(true);
                   }}
-                  className="w-full px-5 py-3.5 flex items-center justify-center gap-2 text-sm font-medium text-cyan-400 hover:bg-slate-800/50 transition-colors"
+                  className="w-full px-5 py-3.5 flex items-center justify-center gap-2 text-sm font-medium text-cinnabar-400 hover:bg-shadow-grey/50 transition-colors"
                 >
                   <Star className="w-4 h-4" />
                   Leave a Review
@@ -474,7 +500,7 @@ export default function FeedbackModal() {
                         value={formAuthor}
                         onChange={(e) => setFormAuthor(e.target.value)}
                         placeholder="Your name (optional)"
-                        className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 transition-colors"
+                        className="w-full bg-shadow-grey/50 border border-shadow-grey-light rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cinnabar-500/50 transition-colors"
                       />
                       {/* Text area */}
                       <textarea
@@ -482,7 +508,7 @@ export default function FeedbackModal() {
                         onChange={(e) => setFormText(e.target.value)}
                         placeholder="Share your experience or suggestion..."
                         rows={3}
-                        className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 resize-none transition-colors"
+                        className="w-full bg-shadow-grey/50 border border-shadow-grey-light rounded-lg px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cinnabar-500/50 resize-none transition-colors"
                       />
                       {/* Submit + cancel */}
                       <div className="flex gap-2">
@@ -493,7 +519,7 @@ export default function FeedbackModal() {
                             setFormText("");
                             setFormAuthor("");
                           }}
-                          className="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 bg-slate-800 border border-slate-700 hover:bg-slate-700 transition-all"
+                          className="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 bg-shadow-grey border border-shadow-grey-light hover:bg-slate-700 transition-all"
                         >
                           Cancel
                         </button>
@@ -502,8 +528,8 @@ export default function FeedbackModal() {
                           disabled={formRating === 0 || !formText.trim()}
                           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                             formRating > 0 && formText.trim()
-                              ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                              : "bg-slate-800 text-slate-600 cursor-not-allowed border border-slate-700"
+                              ? "bg-cinnabar-500 text-slate-950 hover:bg-cinnabar-400 shadow-[0_0_15px_rgba(239,62,54,0.2)]"
+                              : "bg-shadow-grey text-slate-600 cursor-not-allowed border border-shadow-grey-light"
                           }`}
                         >
                           <Send className="w-3.5 h-3.5" />

@@ -99,7 +99,7 @@ export default function PartSelectorModal({
           style={{ backdropFilter: "blur(8px)" }}
         >
           <motion.div
-            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl border border-shadow-grey-light bg-shadow-grey shadow-2xl"
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
@@ -107,18 +107,18 @@ export default function PartSelectorModal({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-700/50">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-shadow-grey-light/50">
               <div>
                 <h3 className="text-lg font-bold text-slate-100">Select Part</h3>
-                <span className="text-xs text-cyan-400 font-medium uppercase tracking-wider">{category.toUpperCase()}</span>
+                <span className="text-xs text-cinnabar-400 font-medium uppercase tracking-wider">{category.toUpperCase()}</span>
               </div>
-              <button onClick={onClose} className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition-all">
+              <button onClick={onClose} className="w-8 h-8 rounded-lg bg-shadow-grey flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition-all">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Search + Filters */}
-            <div className="px-5 py-3 border-b border-slate-700/50 space-y-2.5">
+            <div className="px-5 py-3 border-b border-shadow-grey-light/50 space-y-2.5">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                 <input
@@ -127,7 +127,7 @@ export default function PartSelectorModal({
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search by name, brand, or specs..."
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-shadow-grey border border-shadow-grey-light text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-cinnabar-500/50 focus:ring-1 focus:ring-cinnabar-500/20 transition-all"
                 />
               </div>
 
@@ -137,8 +137,8 @@ export default function PartSelectorModal({
                   onClick={() => setBrandFilter("all")}
                   className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
                     brandFilter === "all"
-                      ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-400"
-                      : "bg-slate-800/50 border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300"
+                      ? "bg-cinnabar-500/15 border-cinnabar-500/30 text-cinnabar-400"
+                      : "bg-shadow-grey/50 border-shadow-grey-light text-slate-500 hover:border-shadow-grey-light hover:text-slate-300"
                   }`}
                 >
                   All
@@ -149,8 +149,8 @@ export default function PartSelectorModal({
                     onClick={() => setBrandFilter(b === brandFilter ? "all" : b)}
                     className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
                       brandFilter === b
-                        ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-400"
-                        : "bg-slate-800/50 border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300"
+                        ? "bg-cinnabar-500/15 border-cinnabar-500/30 text-cinnabar-400"
+                        : "bg-shadow-grey/50 border-shadow-grey-light text-slate-500 hover:border-shadow-grey-light hover:text-slate-300"
                     }`}
                   >
                     {b}
@@ -164,7 +164,7 @@ export default function PartSelectorModal({
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-slate-300 focus:outline-none focus:border-cyan-500/50"
+                  className="px-2.5 py-1.5 rounded-lg bg-shadow-grey border border-shadow-grey-light text-xs text-slate-300 focus:outline-none focus:border-cinnabar-500/50"
                 >
                   <option value="price-asc">Price: Low → High</option>
                   <option value="price-desc">Price: High → Low</option>
@@ -182,7 +182,7 @@ export default function PartSelectorModal({
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="w-20 h-20 rounded-2xl bg-slate-800/50 border border-slate-700/50 flex items-center justify-center mb-4"
+                    className="w-20 h-20 rounded-2xl bg-shadow-grey/50 border border-shadow-grey-light/50 flex items-center justify-center mb-4"
                   >
                     <SearchX className="w-10 h-10 text-slate-600" />
                   </motion.div>
@@ -199,10 +199,10 @@ export default function PartSelectorModal({
                       onClick={() => { triggerLightHaptic(); onSelect(part); onClose(); }}
                       className={`w-full text-left rounded-xl border p-3 transition-all duration-200 group flex items-start gap-3 ${
                         isSelected
-                          ? "border-cyan-500/40 bg-cyan-500/5"
+                          ? "border-cinnabar-500/40 bg-cinnabar-500/5"
                           : compatIssue?.severity === "error"
                             ? "border-red-500/20 bg-red-500/5 hover:border-red-500/30"
-                            : "border-slate-700/50 bg-slate-800/30 hover:border-cyan-500/30 hover:bg-slate-800/60"
+                            : "border-shadow-grey-light/50 bg-shadow-grey/30 hover:border-cinnabar-500/30 hover:bg-shadow-grey/60"
                       }`}
                     >
                       {/* Thumbnail */}
@@ -210,14 +210,14 @@ export default function PartSelectorModal({
                         src={part.imageUrl}
                         alt={part.name}
                         category={part.category}
-                        className="flex-shrink-0 w-14 h-14 border border-slate-700/50"
+                        className="flex-shrink-0 w-14 h-14 border border-shadow-grey-light/50"
                       />
 
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 mb-0.5">
                           <h4 className="text-sm font-semibold text-slate-200 truncate">{part.name}</h4>
                           {isSelected && (
-                            <span className="flex-shrink-0 w-5 h-5 rounded-full bg-cyan-500 flex items-center justify-center">
+                            <span className="flex-shrink-0 w-5 h-5 rounded-full bg-cinnabar-500 flex items-center justify-center">
                               <Check className="w-3 h-3 text-white" />
                             </span>
                           )}
@@ -233,18 +233,18 @@ export default function PartSelectorModal({
                           )}
                         </div>
                         <div className="flex items-center gap-1.5 mb-1.5">
-                          <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-slate-800 text-slate-400 border border-slate-700/50">{part.brand}</span>
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-shadow-grey text-slate-400 border border-shadow-grey-light/50">{part.brand}</span>
                           {part.socket && (
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-slate-800 text-slate-500 border border-slate-700/50">{part.socket}</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-shadow-grey text-slate-500 border border-shadow-grey-light/50">{part.socket}</span>
                           )}
                         </div>
                         <div className="flex flex-wrap gap-1 mb-1.5">
                           {part.specs.slice(0, 3).map((spec, i) => (
-                            <span key={i} className="px-1.5 py-0.5 rounded text-[10px] bg-slate-800/60 text-slate-400 border border-slate-700/30">{spec}</span>
+                            <span key={i} className="px-1.5 py-0.5 rounded text-[10px] bg-shadow-grey/60 text-slate-400 border border-shadow-grey-light/30">{spec}</span>
                           ))}
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm font-bold text-cyan-400">${part.priceUSD.toLocaleString()}</span>
+                          <span className="text-sm font-bold text-cinnabar-400">${part.priceUSD.toLocaleString()}</span>
                           <span className="text-[11px] text-slate-500">₹{part.priceINR.toLocaleString()}</span>
                           {part.tdpWatts > 0 && <span className="text-[10px] text-slate-500">{part.tdpWatts}W TDP</span>}
                         </div>

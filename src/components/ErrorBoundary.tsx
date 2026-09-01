@@ -38,7 +38,7 @@ export default class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-shadow-grey-dark text-slate-100 flex items-center justify-center px-4">
           <div className="max-w-md w-full text-center">
             {/* Glowing error icon */}
             <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.15)]">
@@ -51,13 +51,13 @@ export default class ErrorBoundary extends Component<Props, State> {
             <p className="text-slate-400 text-sm leading-relaxed mb-2">
               Your hardware configuration encountered an unexpected error.
             </p>
-            <p className="text-slate-500 text-xs mb-8 font-mono bg-slate-900/60 rounded-lg px-4 py-3 border border-slate-800">
+            <p className="text-slate-500 text-xs mb-8 font-mono bg-shadow-grey/60 rounded-lg px-4 py-3 border border-slate-800">
               {this.state.error?.message || "Unknown error"}
             </p>
 
             <button
               onClick={this.handleReset}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] transition-all duration-300"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm bg-cinnabar-500 text-slate-950 hover:bg-cinnabar-400 shadow-[0_0_15px_rgba(239,62,54,0.3)] hover:shadow-[0_0_25px_rgba(239,62,54,0.4)] transition-all duration-300"
             >
               <RotateCcw className="w-4 h-4" />
               Reset &amp; Reload

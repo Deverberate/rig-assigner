@@ -5,6 +5,7 @@
 body {
   margin: 0;
   min-height: 100svh;
+  background-color: #1e191b;
 }
 
 /* ── Custom Animations ────────────────────────────────────────── */
@@ -41,8 +42,8 @@ body {
 
 /* Subtle glow pulse for active badges */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(34, 211, 238, 0.15); }
-  50% { box-shadow: 0 0 16px rgba(34, 211, 238, 0.3); }
+  0%, 100% { box-shadow: 0 0 8px rgba(239, 62, 54, 0.15); }
+  50% { box-shadow: 0 0 16px rgba(239, 62, 54, 0.3); }
 }
 .animate-glow-pulse {
   animation: glow-pulse 2s ease-in-out infinite;

@@ -361,10 +361,10 @@ export default function ResultsDashboard({
           return (
             <div
               key={i}
-              className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 transition-all duration-150 group hover:border-cyan-500/50"
+              className="rounded-xl border border-shadow-grey-light bg-shadow-grey/60 p-4 transition-all duration-150 group hover:border-cinnabar-500/50"
             >
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-cyan-400 transition-colors">
+                <div className="w-8 h-8 rounded-lg bg-shadow-grey flex items-center justify-center text-slate-400 group-hover:text-cinnabar-400 transition-colors">
                   <Icon className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{spec.label}</span>
@@ -396,10 +396,10 @@ export default function ResultsDashboard({
           return (
             <div
               key={i}
-              className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 transition-all duration-150 group hover:border-cyan-500/50"
+              className="rounded-xl border border-shadow-grey-light bg-shadow-grey/60 p-4 transition-all duration-150 group hover:border-cinnabar-500/50"
             >
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-cyan-400 transition-colors">
+                <div className="w-8 h-8 rounded-lg bg-shadow-grey flex items-center justify-center text-slate-400 group-hover:text-cinnabar-400 transition-colors">
                   <Icon className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{spec.label}</span>
@@ -430,10 +430,10 @@ export default function ResultsDashboard({
               onClick={() => setModalPart({ part, key })}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setModalPart({ part, key }); }}
               className={
-                "rounded-xl border bg-slate-900/60 p-4 transition-all duration-150 group cursor-pointer hover:border-cyan-400 active:scale-[0.99] " +
+                "rounded-xl border bg-shadow-grey/60 p-4 transition-all duration-150 group cursor-pointer hover:border-cinnabar-400 active:scale-[0.99] " +
                 (isChanged
                   ? "border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.1)]"
-                  : "border-slate-700 hover:border-cyan-500/50")
+                  : "border-shadow-grey-light hover:border-cinnabar-500/50")
               }
             >
               <div className="flex items-center gap-2 mb-2">
@@ -442,7 +442,7 @@ export default function ResultsDashboard({
                     "w-8 h-8 rounded-lg flex items-center justify-center transition-colors " +
                     (isChanged
                       ? "bg-emerald-500/10 text-emerald-400"
-                      : "bg-slate-800 text-slate-400 group-hover:text-cyan-400")
+                      : "bg-shadow-grey text-slate-400 group-hover:text-cinnabar-400")
                   }
                 >
                   <Icon className="w-4 h-4" />
@@ -455,7 +455,7 @@ export default function ResultsDashboard({
                 )}
               </div>
               <p className="text-sm font-medium text-slate-200 leading-snug mb-1">{part.spec}</p>
-              <p className="text-xs text-cyan-400 font-medium">
+              <p className="text-xs text-cinnabar-400 font-medium">
                 {part.estimatedPrice === 0 ? "Included" : `$${part.estimatedPrice}`}
               </p>
             </div>
@@ -467,13 +467,13 @@ export default function ResultsDashboard({
 
   return (
     <div
-      className={`min-h-screen bg-slate-950 text-slate-100 px-4 py-12 transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
+      className={`min-h-screen bg-shadow-grey-dark text-slate-100 px-4 py-12 transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
     >
       <div className="max-w-4xl mx-auto">
         {/* ── Header ── */}
         <div className="text-center mb-6">
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            <span className="text-cyan-400">Rig</span> Assigner
+            <span className="text-cinnabar-400">Rig</span> Assigner
           </h1>
           <p className="text-slate-400 mt-2">
             Your perfect {deviceCategory === "pc" ? "build" : deviceCategory} is ready.
@@ -494,19 +494,19 @@ export default function ResultsDashboard({
         )}
 
         {/* ── Build title + price + badge ── */}
-        <div className="rounded-xl border border-cyan-500/30 bg-slate-900/60 p-6 mb-6 shadow-[0_0_30px_rgba(34,211,238,0.08)]">
+        <div className="rounded-xl border border-cinnabar-500/30 bg-shadow-grey/60 p-6 mb-6 shadow-[0_0_30px_rgba(239,62,54,0.08)]">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center">
-                <DeviceIcon className="w-6 h-6 text-cyan-400" />
+              <div className="w-12 h-12 rounded-xl bg-cinnabar-500/10 flex items-center justify-center">
+                <DeviceIcon className="w-6 h-6 text-cinnabar-400" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-slate-100">{activePreset.title}</h2>
                 <div className="flex items-center gap-2 mt-1 flex-wrap">
-                  <span className="relative inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20">
+                  <span className="relative inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-cinnabar-500/15 text-cinnabar-400 border border-cinnabar-500/20">
                     <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400" />
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cinnabar-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-cinnabar-400" />
                     </span>
                     {statusBadge}
                   </span>
@@ -531,7 +531,7 @@ export default function ResultsDashboard({
               </div>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-cyan-400">
+              <p className="text-3xl font-bold text-cinnabar-400">
                 ${activePreset.totalEstimatedPrice.toLocaleString()}
               </p>
               <p className="text-xs text-slate-500">estimated total</p>
@@ -555,14 +555,14 @@ export default function ResultsDashboard({
 
           {/* Highlights */}
           {activePreset.highlights.length > 0 && (
-            <div className="rounded-lg bg-slate-800/50 p-4">
-              <p className="text-xs text-cyan-400 uppercase tracking-wider font-semibold mb-2">
+            <div className="rounded-lg bg-shadow-grey/50 p-4">
+              <p className="text-xs text-cinnabar-400 uppercase tracking-wider font-semibold mb-2">
                 Why This Fits Your Workload
               </p>
               <div className="space-y-2">
                 {activePreset.highlights.map((h, i) => (
                   <div key={i} className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-cinnabar-400 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-slate-300 leading-relaxed">{h}</p>
                   </div>
                 ))}
@@ -574,11 +574,11 @@ export default function ResultsDashboard({
         {/* ── Performance Metrics ── */}
         {activePreset.performanceMetrics.length > 0 && (
           <div
-            className={`rounded-xl border border-slate-700 bg-slate-900/60 p-5 mb-6 transition-opacity duration-150 ${crossFade ? "opacity-0" : "opacity-100"}`}
+            className={`rounded-xl border border-shadow-grey-light bg-shadow-grey/60 p-5 mb-6 transition-opacity duration-150 ${crossFade ? "opacity-0" : "opacity-100"}`}
           >
             <div className="flex items-center gap-2 mb-4">
-              <Gauge className="w-4 h-4 text-cyan-400" />
-              <p className="text-xs text-cyan-400 uppercase tracking-wider font-semibold">
+              <Gauge className="w-4 h-4 text-cinnabar-400" />
+              <p className="text-xs text-cinnabar-400 uppercase tracking-wider font-semibold">
                 Expected Real-World Performance
               </p>
             </div>
@@ -588,10 +588,10 @@ export default function ResultsDashboard({
                 return (
                   <div
                     key={i}
-                    className="flex items-center gap-3 rounded-lg bg-slate-800/50 border border-slate-700/50 px-4 py-3 hover:border-cyan-500/30 transition-all duration-150"
+                    className="flex items-center gap-3 rounded-lg bg-shadow-grey/50 border border-shadow-grey-light/50 px-4 py-3 hover:border-cinnabar-500/30 transition-all duration-150"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-5 h-5 text-cyan-400" />
+                    <div className="w-10 h-10 rounded-lg bg-cinnabar-500/10 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-cinnabar-400" />
                     </div>
                     <div className="min-w-0">
                       <p className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{metric.label}</p>
@@ -605,7 +605,7 @@ export default function ResultsDashboard({
         )}
 
         {/* ── Budget Tweaker ── */}
-        <div className="rounded-xl border border-slate-700 bg-slate-900/60 p-4 mb-6">
+        <div className="rounded-xl border border-shadow-grey-light bg-shadow-grey/60 p-4 mb-6">
           <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-3 text-center">
             Budget Tier
           </p>
@@ -616,8 +616,8 @@ export default function ResultsDashboard({
               className={
                 "flex flex-col items-center gap-1 px-2 py-2.5 sm:px-3 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 " +
                 (lower
-                  ? "bg-slate-800 border border-slate-700 hover:border-cyan-500/50 hover:bg-slate-700/50 text-slate-300 hover:text-slate-100 cursor-pointer"
-                  : "bg-slate-800/30 border border-slate-800 text-slate-600 cursor-not-allowed")
+                  ? "bg-shadow-grey border border-shadow-grey-light hover:border-cinnabar-500/50 hover:bg-slate-700/50 text-slate-300 hover:text-slate-100 cursor-pointer"
+                  : "bg-shadow-grey/30 border border-slate-800 text-slate-600 cursor-not-allowed")
               }
             >
               <ArrowDown className="w-4 h-4" />
@@ -629,10 +629,10 @@ export default function ResultsDashboard({
               )}
             </button>
 
-            <div className="flex flex-col items-center gap-1 px-3 py-3 rounded-lg text-sm font-medium bg-cyan-500/10 border-2 border-cyan-500/30 text-cyan-400">
+            <div className="flex flex-col items-center gap-1 px-3 py-3 rounded-lg text-sm font-medium bg-cinnabar-500/10 border-2 border-cinnabar-500/30 text-cinnabar-400">
               <Target className="w-4 h-4" />
               <span className="text-[11px] font-semibold">Recommended</span>
-              <span className="text-[10px] text-cyan-400/70">
+              <span className="text-[10px] text-cinnabar-400/70">
                 ~${activePreset.totalEstimatedPrice.toLocaleString()}
               </span>
             </div>
@@ -643,8 +643,8 @@ export default function ResultsDashboard({
               className={
                 "flex flex-col items-center gap-1 px-2 py-2.5 sm:px-3 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 " +
                 (upper
-                  ? "bg-slate-800 border border-slate-700 hover:border-cyan-500/50 hover:bg-slate-700/50 text-slate-300 hover:text-slate-100 cursor-pointer"
-                  : "bg-slate-800/30 border border-slate-800 text-slate-600 cursor-not-allowed")
+                  ? "bg-shadow-grey border border-shadow-grey-light hover:border-cinnabar-500/50 hover:bg-slate-700/50 text-slate-300 hover:text-slate-100 cursor-pointer"
+                  : "bg-shadow-grey/30 border border-slate-800 text-slate-600 cursor-not-allowed")
               }
             >
               <ArrowUp className="w-4 h-4" />
@@ -677,8 +677,8 @@ export default function ResultsDashboard({
               className={
                 "w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300 border " +
                 (showComparison
-                  ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-400"
-                  : "bg-slate-900/60 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-300")
+                  ? "bg-cinnabar-500/10 border-cinnabar-500/30 text-cinnabar-400"
+                  : "bg-shadow-grey/60 border-shadow-grey-light text-slate-400 hover:border-slate-600 hover:text-slate-300")
               }
             >
               <GitCompareArrows className="w-4 h-4" />
@@ -686,7 +686,7 @@ export default function ResultsDashboard({
             </button>
 
             {showComparison && compareTargetId && (
-              <div className="mt-3 rounded-xl border border-slate-700 bg-slate-900/60 p-5 transition-all duration-300">
+              <div className="mt-3 rounded-xl border border-shadow-grey-light bg-shadow-grey/60 p-5 transition-all duration-300">
                 {/* Comparison target picker */}
                 <div className="flex items-center gap-2 mb-4 flex-wrap">
                   <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Compare with:</span>
@@ -699,8 +699,8 @@ export default function ResultsDashboard({
                         className={
                           "px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all duration-200 border " +
                           (compareTargetId === p.id
-                            ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-400"
-                            : "bg-slate-800/50 border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300")
+                            ? "bg-cinnabar-500/15 border-cinnabar-500/30 text-cinnabar-400"
+                            : "bg-shadow-grey/50 border-shadow-grey-light text-slate-500 hover:border-shadow-grey-light hover:text-slate-300")
                         }
                       >
                         {p.brand} {p.title.split(" ").slice(-1)[0]}
@@ -730,7 +730,7 @@ export default function ResultsDashboard({
                     return (
                       <>
                         {/* Price delta */}
-                        <div className="flex items-center justify-center gap-2 mb-4 py-2 rounded-lg bg-slate-800/50">
+                        <div className="flex items-center justify-center gap-2 mb-4 py-2 rounded-lg bg-shadow-grey/50">
                           <span className="text-xs text-slate-500">Price difference:</span>
                           <span className={`text-sm font-bold ${priceDelta < 0 ? "text-emerald-400" : priceDelta > 0 ? "text-red-400" : "text-slate-400"}`}>
                             {priceDelta < 0 ? "\u2212" : priceDelta > 0 ? "+" : ""}${Math.abs(priceDelta).toLocaleString()}
@@ -744,21 +744,21 @@ export default function ResultsDashboard({
                             const Icon = row.icon;
                             const isDifferent = row.current !== row.target;
                             return (
-                              <div key={i} className="rounded-lg border border-slate-700/50 bg-slate-800/30 p-3">
+                              <div key={i} className="rounded-lg border border-shadow-grey-light/50 bg-shadow-grey/30 p-3">
                                 <div className="flex items-center gap-2 mb-2">
                                   <Icon className="w-3.5 h-3.5 text-slate-500" />
                                   <span className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{row.label}</span>
                                   {isDifferent && (
-                                    <span className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20">DIFF</span>
+                                    <span className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-cinnabar-500/15 text-cinnabar-400 border border-cinnabar-500/20">DIFF</span>
                                   )}
                                 </div>
                                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                                  <div className="flex-1 min-w-0 rounded-md bg-slate-800/50 border border-slate-700/30 px-2.5 py-1.5">
-                                    <p className="text-[10px] text-cyan-400/60 uppercase font-medium mb-0.5">{activePreset.title.split(" ").slice(-1)[0]}</p>
+                                  <div className="flex-1 min-w-0 rounded-md bg-shadow-grey/50 border border-shadow-grey-light/30 px-2.5 py-1.5">
+                                    <p className="text-[10px] text-cinnabar-400/60 uppercase font-medium mb-0.5">{activePreset.title.split(" ").slice(-1)[0]}</p>
                                     <p className="text-xs text-slate-200 font-medium leading-snug">{row.current}</p>
                                   </div>
                                   <ArrowRight className="w-3 h-3 text-slate-600 flex-shrink-0 hidden sm:block" />
-                                  <div className="flex-1 min-w-0 rounded-md bg-slate-800/50 border border-slate-700/30 px-2.5 py-1.5">
+                                  <div className="flex-1 min-w-0 rounded-md bg-shadow-grey/50 border border-shadow-grey-light/30 px-2.5 py-1.5">
                                     <p className="text-[10px] text-violet-400/60 uppercase font-medium mb-0.5">{target.title.split(" ").slice(-1)[0]}</p>
                                     <p className="text-xs text-slate-200 font-medium leading-snug">{row.target}</p>
                                   </div>
@@ -785,7 +785,7 @@ export default function ResultsDashboard({
                     ];
                     return (
                       <>
-                        <div className="flex items-center justify-center gap-2 mb-4 py-2 rounded-lg bg-slate-800/50">
+                        <div className="flex items-center justify-center gap-2 mb-4 py-2 rounded-lg bg-shadow-grey/50">
                           <span className="text-xs text-slate-500">Price difference:</span>
                           <span className={`text-sm font-bold ${priceDelta < 0 ? "text-emerald-400" : priceDelta > 0 ? "text-red-400" : "text-slate-400"}`}>
                             {priceDelta < 0 ? "\u2212" : priceDelta > 0 ? "+" : ""}${Math.abs(priceDelta).toLocaleString()}
@@ -799,21 +799,21 @@ export default function ResultsDashboard({
                             const Icon = row.icon;
                             const isDifferent = row.current !== row.target;
                             return (
-                              <div key={i} className="rounded-lg border border-slate-700/50 bg-slate-800/30 p-3">
+                              <div key={i} className="rounded-lg border border-shadow-grey-light/50 bg-shadow-grey/30 p-3">
                                 <div className="flex items-center gap-2 mb-2">
                                   <Icon className="w-3.5 h-3.5 text-slate-500" />
                                   <span className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{row.label}</span>
                                   {isDifferent && (
-                                    <span className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20">DIFF</span>
+                                    <span className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold bg-cinnabar-500/15 text-cinnabar-400 border border-cinnabar-500/20">DIFF</span>
                                   )}
                                 </div>
                                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                                  <div className="flex-1 min-w-0 rounded-md bg-slate-800/50 border border-slate-700/30 px-2.5 py-1.5">
-                                    <p className="text-[10px] text-cyan-400/60 uppercase font-medium mb-0.5">{activePreset.title.split(" ").slice(-1)[0]}</p>
+                                  <div className="flex-1 min-w-0 rounded-md bg-shadow-grey/50 border border-shadow-grey-light/30 px-2.5 py-1.5">
+                                    <p className="text-[10px] text-cinnabar-400/60 uppercase font-medium mb-0.5">{activePreset.title.split(" ").slice(-1)[0]}</p>
                                     <p className="text-xs text-slate-200 font-medium leading-snug">{row.current}</p>
                                   </div>
                                   <ArrowRight className="w-3 h-3 text-slate-600 flex-shrink-0 hidden sm:block" />
-                                  <div className="flex-1 min-w-0 rounded-md bg-slate-800/50 border border-slate-700/30 px-2.5 py-1.5">
+                                  <div className="flex-1 min-w-0 rounded-md bg-shadow-grey/50 border border-shadow-grey-light/30 px-2.5 py-1.5">
                                     <p className="text-[10px] text-violet-400/60 uppercase font-medium mb-0.5">{target.title.split(" ").slice(-1)[0]}</p>
                                     <p className="text-xs text-slate-200 font-medium leading-snug">{row.target}</p>
                                   </div>
@@ -841,8 +841,8 @@ export default function ResultsDashboard({
               className={
                 "w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300 border " +
                 (showComparison
-                  ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-400"
-                  : "bg-slate-900/60 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-300")
+                  ? "bg-cinnabar-500/10 border-cinnabar-500/30 text-cinnabar-400"
+                  : "bg-shadow-grey/60 border-shadow-grey-light text-slate-400 hover:border-slate-600 hover:text-slate-300")
               }
             >
               <GitCompareArrows className="w-4 h-4" />
@@ -852,7 +852,7 @@ export default function ResultsDashboard({
             </button>
 
             {showComparison && (
-              <div className="mt-3 rounded-xl border border-slate-700 bg-slate-900/60 p-5 transition-all duration-300">
+              <div className="mt-3 rounded-xl border border-shadow-grey-light bg-shadow-grey/60 p-5 transition-all duration-300">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Previous Build</p>
@@ -870,7 +870,7 @@ export default function ResultsDashboard({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 mb-4 py-2 rounded-lg bg-slate-800/50">
+                <div className="flex items-center justify-center gap-2 mb-4 py-2 rounded-lg bg-shadow-grey/50">
                   <span className="text-xs text-slate-500">Price change:</span>
                   <span
                     className={`text-sm font-bold ${priceDiff < 0 ? "text-emerald-400" : priceDiff > 0 ? "text-red-400" : "text-slate-400"}`}
@@ -884,14 +884,14 @@ export default function ResultsDashboard({
 
                 {changedParts.size > 0 ? (
                   <div className="space-y-2">
-                    <p className="text-xs text-cyan-400 uppercase tracking-wider font-semibold mb-2">
+                    <p className="text-xs text-cinnabar-400 uppercase tracking-wider font-semibold mb-2">
                       Changed Components
                     </p>
                     {Array.from(changedParts.entries()).map(([key, { old: oldPart, new: newPart }]) => {
                       const meta = COMPONENT_META[key];
                       const Icon = meta?.icon || Cpu;
                       return (
-                        <div key={key} className="rounded-lg border border-slate-700/50 bg-slate-800/30 p-3">
+                        <div key={key} className="rounded-lg border border-shadow-grey-light/50 bg-shadow-grey/30 p-3">
                           <div className="flex items-center gap-2 mb-2">
                             <Icon className="w-3.5 h-3.5 text-slate-500" />
                             <span className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">
@@ -934,7 +934,7 @@ export default function ResultsDashboard({
         <div className="flex flex-col sm:flex-row gap-3 mb-6 flex-wrap">
           <button
             onClick={handleDownload}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all duration-300"
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-shadow-grey-light bg-shadow-grey hover:bg-slate-700 hover:border-cinnabar-500/50 text-slate-300 hover:text-slate-100 transition-all duration-300"
           >
             <span className={copied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {copied ? (
@@ -953,7 +953,7 @@ export default function ResultsDashboard({
 
           <button
             onClick={handleDownloadPlain}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-slate-100 transition-all duration-300"
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border border-shadow-grey-light bg-shadow-grey hover:bg-slate-700 hover:border-cinnabar-500/50 text-slate-300 hover:text-slate-100 transition-all duration-300"
           >
             <span className={plainCopied ? "animate-morph-check inline-flex items-center gap-2" : "inline-flex items-center gap-2"}>
               {plainCopied ? (
@@ -972,10 +972,10 @@ export default function ResultsDashboard({
 
           <button
             onClick={onRestart}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] transition-all duration-300"
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm bg-cinnabar-500 text-slate-950 hover:bg-cinnabar-400 shadow-[0_0_15px_rgba(239,62,54,0.3)] hover:shadow-[0_0_25px_rgba(239,62,54,0.4)] transition-all duration-300"
           >
             <RotateCcw className="w-4 h-4" />
-            Re-take Quiz
+            Retake
           </button>
         </div>
 
@@ -983,14 +983,14 @@ export default function ResultsDashboard({
 
         {/* ── Total Setup Cost (if peripherals selected) ── */}
         {selectedPeripherals.size > 0 && (
-          <div className="mt-6 rounded-xl border border-cyan-500/30 bg-slate-900/60 p-5 shadow-[0_0_20px_rgba(34,211,238,0.05)]">
+          <div className="mt-6 rounded-xl border border-cinnabar-500/30 bg-shadow-grey/60 p-5 shadow-[0_0_20px_rgba(239,62,54,0.05)]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Total Setup Cost</p>
                 <p className="text-[11px] text-slate-500 mt-0.5">Build + {selectedPeripherals.size} selected peripheral{selectedPeripherals.size > 1 ? "s" : ""}</p>
               </div>
               <div className="text-right">
-                <p className="text-2xl font-bold text-cyan-400">
+                <p className="text-2xl font-bold text-cinnabar-400">
                   ${(activePreset.totalEstimatedPrice + peripheralTotal).toLocaleString()}
                 </p>
                 <p className="text-[10px] text-slate-500">
@@ -1002,16 +1002,16 @@ export default function ResultsDashboard({
         )}
 
         {/* ── Recommended Peripherals & Gear ── */}
-        <div className="mt-6 rounded-xl border border-slate-700 bg-slate-900/60 overflow-hidden">
+        <div className="mt-6 rounded-xl border border-shadow-grey-light bg-shadow-grey/60 overflow-hidden">
           <button
             onClick={() => setShowPeripherals(!showPeripherals)}
-            className="w-full flex items-center justify-between px-5 py-4 text-left transition-all hover:bg-slate-800/50"
+            className="w-full flex items-center justify-between px-5 py-4 text-left transition-all hover:bg-shadow-grey/50"
           >
             <div className="flex items-center gap-2">
-              <Gamepad2 className="w-4 h-4 text-cyan-400" />
+              <Gamepad2 className="w-4 h-4 text-cinnabar-400" />
               <span className="text-sm font-semibold text-slate-200">Recommended Peripherals & Gear</span>
               {selectedPeripherals.size > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cinnabar-500/15 text-cinnabar-400 border border-cinnabar-500/20">
                   {selectedPeripherals.size} selected
                 </span>
               )}
@@ -1022,7 +1022,7 @@ export default function ResultsDashboard({
           </button>
 
           {showPeripherals && (
-            <div className="px-5 pb-5 space-y-4 border-t border-slate-700/50">
+            <div className="px-5 pb-5 space-y-4 border-t border-shadow-grey-light/50">
               {Object.entries(peripheralGroups).map(([category, items]) => (
                 <div key={category} className="pt-3">
                   <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold mb-2">
@@ -1036,19 +1036,19 @@ export default function ResultsDashboard({
                         <button
                           key={p.id}
                           onClick={() => togglePeripheral(p.id)}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all duration-200 text-left ${isSelected ? "border-cyan-500/40 bg-cyan-500/5" : "border-slate-700/50 bg-slate-800/20 hover:border-slate-600 hover:bg-slate-800/40"}`} >
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all duration-200 text-left ${isSelected ? "border-cinnabar-500/40 bg-cinnabar-500/5" : "border-shadow-grey-light/50 bg-shadow-grey/20 hover:border-slate-600 hover:bg-shadow-grey/40"}`} >
                           <div className="w-6 h-6 flex items-center justify-center">
                             {isSelected ? (
-                              <CheckSquare className="w-5 h-5 text-cyan-400" />
+                              <CheckSquare className="w-5 h-5 text-cinnabar-400" />
                             ) : (
                               <Square className="w-5 h-5 text-slate-600" />
                             )}
                           </div>
                           <Icon className="w-4 h-4 text-slate-500 flex-shrink-0" />
                           <div className="flex-1 min-w-0">
-                            <p className={`text-sm font-medium truncate ${isSelected ? "text-cyan-300" : "text-slate-300"}`}>{p.name}</p>
+                            <p className={`text-sm font-medium truncate ${isSelected ? "text-cinnabar-300" : "text-slate-300"}`}>{p.name}</p>
                           </div>
-                          <span className="text-sm font-bold text-cyan-400 ml-2">${p.price}</span>
+                          <span className="text-sm font-bold text-cinnabar-400 ml-2">${p.price}</span>
                         </button>
                       );
                     })}
